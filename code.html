@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: #000;
+    }
+  </style>
+</head>
+<body>
+<!-- STITCH_THREEJS_START:ANIMATION_16 class="fixed inset-0 w-full h-full bg-transparent" -->
+<div class="fixed inset-0 w-full h-full bg-transparent" style="display:block;">
+<script src="https://ajax.googleapis.com/ajax/libs/threejs/r125/three.min.js"></script>
+<div id="threejs-container-ANIMATION_16" style="width:100%;height:100%"></div>
+<script>
+(function() {
+  const container = document.getElementById('threejs-container-ANIMATION_16');
+  const devicePixelRatio = window.devicePixelRatio || 1;
+  (function() {
+  const container = document.getElementById('threejs-container-ANIMATION_TOOLBOX');
+  if (!container) return;
+  
+  const width = container.clientWidth || window.innerWidth;
+  const height = container.clientHeight || window.innerHeight;
+
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 1000);
+  camera.position.set(5, 5, 8);
+  camera.lookAt(0, 0.5, 0);
+
+  const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+  renderer.setSize(width, height);
+  renderer.setPixelRatio(window.devicePixelRatio);
+  container.appendChild(renderer.domElement);
+
+  // Colors from Design System
+  const boxColor = 0x1A1A1A;
+  const accentColor = 0xE8C547;
+  const borderColor = 0x2A2A2A;
+
+  const mainGroup = new THREE.Group();
+  scene.add(mainGroup);
+
+  const toolboxGroup = new THREE.Group();
+  mainGroup.add(toolboxGroup);
+
+  // Main Body
+  const bodyGeom = new THREE.BoxGeometry(3, 1.4, 1.8);
+  const bodyMat = new THREE.MeshPhongMaterial({ color: boxColor });
+  const body = new THREE.Mesh(bodyGeom, bodyMat);
+  toolboxGroup.add(body);
+
+  // Lid Group
+  const lidPivot = new THREE.Group();
+  lidPivot.position.set(0, 0.7, -0.9);
+  toolboxGroup.add(lidPivot);
+
+  const lidGeom = new THREE.BoxGeometry(3, 0.3, 1.8);
+  const lid = new THREE.Mesh(lidGeom, bodyMat);
+  lid.position.set(0, 0.15, 0.9);
+  lidPivot.add(lid);
+
+  // Handle
+  const handleGeom = new THREE.TorusGeometry(0.35, 0.05, 12, 24, Math.PI);
+  const accentMat = new THREE.MeshPhongMaterial({ color: accentColor });
+  const handle = new THREE.Mesh(handleGeom, accentMat);
+  handle.rotation.x = Math.PI / 2;
+  handle.position.set(0, 0.3, 0.9);
+  lidPivot.add(handle);
+
+  // Latches
+  const latchGeom = new THREE.BoxGeometry(0.12, 0.4, 0.06);
+  const latchL = new THREE.Mesh(latchGeom, accentMat);
+  latchL.position.set(-0.8, -0.1, 1.8);
+  lidPivot.add(latchL);
+  const latchR = latchL.clone();
+  latchR.position.set(0.8, -0.1, 1.8);
+  lidPivot.add(latchR);
+
+  // Lighting
+  const ambient = new THREE.AmbientLight(0xffffff, 0.8);
+  scene.add(ambient);
+  const direct = new THREE.DirectionalLight(0xffffff, 0.6);
+  direct.position.set(5, 10, 7);
+  scene.add(direct);
+
+  // Isometric View Adjustment
+  mainGroup.rotation.x = THREE.MathUtils.degToRad(15);
+  mainGroup.rotation.y = THREE.MathUtils.degToRad(10);
+
+  // Shadow (DOM-based or Simple Mesh)
+  const shadowGeom = new THREE.CircleGeometry(1.5, 32);
+  const shadowMat = new THREE.MeshBasicMaterial({ color: 0x000000, transparent: true, opacity: 0.3 });
+  const shadow = new THREE.Mesh(shadowGeom, shadowMat);
+  shadow.rotation.x = -Math.PI / 2;
+  shadow.position.y = -0.71;
+  mainGroup.add(shadow);
+
+  // Animation State
+  let state = 'falling'; // falling, closed, micro, opening, open, closing
+  let progress = 0;
+  let velocity = 0;
+  let gravity = 0.015;
+  let yPos = 8;
+  let bounces = 0;
+  let lastTime = 0;
+
+  function animate(time) {
+    requestAnimationFrame(animate);
+    const delta = time - lastTime;
+    lastTime = time;
+
+    if (state === 'falling') {
+      velocity -= gravity;
+      yPos += velocity;
+      if (yPos <= 0) {
+        yPos = 0;
+        velocity = -velocity * 0.45; // Bounce
+        bounces++;
+        if (bounces >= 3) {
+          state = 'closed';
+          window.parent.postMessage({ type: 'TOOLBOX_LANDED' }, '*');
+        }
+      }
+      toolboxGroup.position.y = yPos;
+      shadow.scale.setScalar(1 + (yPos/8));
+      shadow.material.opacity = 0.3 * (1 - (yPos/8));
+    }
+
+    if (state === 'opening') {
+      progress += 0.04;
+      if (progress >= 1) {
+        progress = 1;
+        state = 'open';
+      }
+      // EaseOutBack manual
+      const ease = 1 - Math.pow(1 - progress, 3); 
+      lidPivot.rotation.x = -ease * THREE.MathUtils.degToRad(110);
+      toolboxGroup.position.y = ease * 0.4; // Levitate
+      shadow.scale.setScalar(0.8);
+    } else if (state === 'closing') {
+      progress -= 0.05;
+      if (progress <= 0) {
+        progress = 0;
+        state = 'closed';
+      }
+      lidPivot.rotation.x = -progress * THREE.MathUtils.degToRad(110);
+      toolboxGroup.position.y = progress * 0.4;
+    } else if (state === 'micro') {
+      progress += 0.1;
+      if (progress >= 1) {
+        state = 'closed';
+        progress = 0;
+      }
+      const microEase = Math.sin(progress * Math.PI);
+      lidPivot.rotation.x = -microEase * THREE.MathUtils.degToRad(8);
+    }
+
+    renderer.render(scene, camera);
+  }
+
+  container.addEventListener('click', () => {
+    if (state === 'closed') {
+      state = 'opening';
+      progress = 0;
+      window.parent.postMessage({ type: 'TOOLBOX_OPEN' }, '*');
+    } else if (state === 'open') {
+      state = 'closing';
+      progress = 1;
+      window.parent.postMessage({ type: 'TOOLBOX_CLOSE' }, '*');
+    } else if (state === 'falling' && yPos < 1) {
+       // Ignore click during fall
+    } else if (state === 'closed') {
+       // Potential micro-feedback trigger logic handled by state machine
+    }
+  });
+
+  // Listener for micro-feedback from parent
+  window.addEventListener('message', (e) => {
+    if (e.data.type === 'TRIGGER_MICRO' && state === 'closed') {
+      state = 'micro';
+      progress = 0;
+    }
+  });
+
+  animate(0);
+
+  window.addEventListener('resize', () => {
+    const w = container.clientWidth;
+    const h = container.clientHeight;
+    camera.aspect = w / h;
+    camera.updateProjectionMatrix();
+    renderer.setSize(w, h);
+  });
+})();
+})();
+</script>
+</div>
+<!-- STITCH_THREEJS_END:ANIMATION_16 -->
+</body>
+</html>

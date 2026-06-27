@@ -1,0 +1,7 @@
+.claude/
+toolbox_app/build/
+toolbox_app/.dart_tool/
+toolbox_app/.pub/
+toolbox_app/.pub-cache/
+toolbox_app/.flutter-plugins
+toolbox_app/.flutter-plugins-dependencies
