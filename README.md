@@ -32,27 +32,71 @@ El APK compilado está disponible en la raíz del repositorio: `toolbox_app.apk`
 ## Estructura del proyecto
 
 ```
-tarea6/
-├── README.md
-├── DESIGN.md              # Especificación de diseño y colores
-├── code.html              # Prototipo visual de referencia
-├── toolbox_app.apk        # APK de release
-└── toolbox_app/
-    ├── lib/
-    │   ├── main.dart
-    │   ├── theme/
-    │   │   └── app_theme.dart       # Colores, tema y componentes reutilizables
-    │   └── screens/
-    │       ├── home_screen.dart
-    │       ├── gender_screen.dart
-    │       ├── age_screen.dart
-    │       ├── universities_screen.dart
-    │       ├── weather_screen.dart
-    │       ├── pokemon_screen.dart
-    │       ├── wordpress_screen.dart
-    │       └── about_screen.dart
-    ├── assets/images/
-    └── pubspec.yaml
+📁 Tarea5/
+│
+├── 📄 README.md ..................... Documentación del proyecto
+├── 🎨 DESIGN.md ................... Paleta de colores y diseño UI
+├── 🌐 code.html ................... Prototipo visual de referencia
+├── 📦 toolbox_app.apk ............. APK compilado (Android)
+│
+└── 📱 toolbox_app/ ................ Proyecto Flutter
+    │
+    ├── 📄 pubspec.yaml ............ Dependencias y configuración
+    ├── 🖼️ assets/images/ .......... Recursos gráficos
+    │
+    └── 📂 lib/
+        │
+        ├── 🚀 main.dart ........... Punto de entrada de la app
+        │
+        ├── 🎨 theme/
+        │   └── app_theme.dart ..... Tema oscuro, colores, AppCard, AppChip
+        │
+        └── 🧩 screens/
+            ├── home_screen.dart .......... Menú principal (grid de herramientas)
+            ├── gender_screen.dart ........ Predecir género
+            ├── age_screen.dart ........... Predecir edad
+            ├── universities_screen.dart .. Buscar universidades
+            ├── weather_screen.dart ....... Clima en Santo Domingo
+            ├── pokemon_screen.dart ....... Consultar Pokémon
+            ├── wordpress_screen.dart ..... Noticias del blog
+            └── about_screen.dart ......... Acerca del desarrollador
+```
+
+### Flujo de la aplicación
+
+```mermaid
+flowchart TD
+    A["🚀 main.dart"] --> B["🏠 HomeScreen"]
+    B --> C1["👤 Género"]
+    B --> C2["🎂 Edad"]
+    B --> C3["🎓 Universidades"]
+    B --> C4["🌤️ Clima RD"]
+    B --> C5["⚡ Pokémon"]
+    B --> C6["📰 WordPress"]
+    B --> C7["ℹ️ Acerca de"]
+
+    C1 --> API1["genderize.io"]
+    C2 --> API2["agify.io"]
+    C3 --> API3["adamix.net"]
+    C4 --> API4["open-meteo.com"]
+    C5 --> API5["pokeapi.co"]
+    C6 --> API6["tecnologia21.com"]
+
+    style A fill:#FFE285,color:#3B2F00
+    style B fill:#1E2020,color:#E2E2E2
+    style C1 fill:#282A2B,color:#E2E2E2
+    style C2 fill:#282A2B,color:#E2E2E2
+    style C3 fill:#282A2B,color:#E2E2E2
+    style C4 fill:#282A2B,color:#E2E2E2
+    style C5 fill:#282A2B,color:#E2E2E2
+    style C6 fill:#282A2B,color:#E2E2E2
+    style C7 fill:#282A2B,color:#E2E2E2
+    style API1 fill:#333535,color:#CFC6AF
+    style API2 fill:#333535,color:#CFC6AF
+    style API3 fill:#333535,color:#CFC6AF
+    style API4 fill:#333535,color:#CFC6AF
+    style API5 fill:#333535,color:#CFC6AF
+    style API6 fill:#333535,color:#CFC6AF
 ```
 
 ## Requisitos previos
