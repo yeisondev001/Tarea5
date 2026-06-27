@@ -160,3 +160,82 @@ Consistent component behavior is vital for a minimalist system.
 - **Chips:** Always pill-shaped (50px). Active chips use the `accent` color with 10% opacity for the background and the full `accent` color for the label text.
 - **Lists:** Use `md` (16px) vertical padding. Separators should be 0.5px using the `border` color, inset by the margin width to avoid touching the screen edges.
 - **Animations:** Use "Ease-Out-Expo" for transitions. Page entries should use a subtle 20px vertical slide with a simultaneous fade-in. Micro-interactions (like checkbox toggles) should feel snappy (150ms-200ms).
+
+---
+
+# Experiencia de inicio (Home inmersivo)
+
+El *home* abandona el menú de cuadrícula tradicional a favor de una **metáfora física**: la app *es* una caja de herramientas. Todo el escenario se dibuja con `CustomPainter` (vectorial, sin imágenes) para mantener nitidez en cualquier densidad y peso de APK cero.
+
+## Escena del garaje
+Un fondo que sitúa al usuario en un taller real, en tonos apagados para que la caja roja y las cartas sean las protagonistas:
+
+- **Techo de madera** con vetas en perspectiva y una viga frontal.
+- **Tira de luz LED** cálida con resplandor hacia abajo.
+- **Pared con _pegboard_** (panel perforado) y herramientas colgadas dibujadas como siluetas reconocibles: martillo, llave, destornilladores, alicate, serrucho con dientes, nivel con burbujas, cinta métrica y una caja roja.
+- **Banco de trabajo** con tope de madera (*butcher block*) donde se posa la caja, y **gabinetes rojos** con cajones y tiradores cromados.
+- **Piso de concreto** claro, foco cálido cenital sobre la mesa y viñeta sutil para dar profundidad.
+
+## La caja de herramientas (estilo URREA)
+Componente `Toolbox` parametrizado por `lidProgress` (0 cerrada → 1 abierta):
+
+- Cuerpo rojo alargado con degradado, brillo plástico especular (desenfocado) y base sombreada.
+- **Tapa con top redondeado** que sobresale del cuerpo (con labio frontal) y se abre con **rotación 3D real** (perspectiva con `Matrix4..rotateX`).
+- **Asa negra** tipo arco, **dos broches** tipo correa al frente, **cierre central** y **patitas**.
+
+## Abanico de cartas
+Las herramientas se presentan en un **arco simétrico (∩)** que sale de la caja:
+
+- Cada carta se posiciona con coordenadas exactas sobre el arco (garantiza que toda la carta reciba el toque).
+- **Interacción de dos pasos:** el primer toque **selecciona** la carta (se eleva, se agranda y gana borde dorado); el segundo toque sobre la seleccionada **abre** la herramienta.
+- Se puede **deslizar** para hojear como opción.
+- Cada carta muestra un **mini-preview** (`ScreenPreview`) con el ícono representativo de la pantalla destino.
+
+---
+
+# Sistema de Movimiento (Motion)
+
+El movimiento comunica jerarquía, continuidad y causa-efecto. La estética es **moderna y contenida** (Apple/Material 3): un protagonista por pantalla, curvas con intención y duraciones cortas.
+
+## Patrones de animación usados
+
+| Patrón | Dónde | Técnica · Curva · Duración |
+|---|---|---|
+| Caída + rebote | Caja al iniciar | `Tween` + `Curves.bounceOut` · ~1200ms |
+| Apertura de tapa 3D | Tap en la caja | `Matrix4` perspectiva + `easeOutBack` · ~600ms |
+| Despliegue del abanico | Al abrir | Entrada escalonada por carta · `easeOutCubic` · ~950ms |
+| Container transform | Carta → pantalla | Paquete `animations` (`OpenContainer`) · ~480ms |
+| Count-up | Edad, temperatura | `TweenAnimationBuilder` · `easeOutCubic` · ~900ms |
+| Pop-in | Resultado de Género/Edad | Escala 0.8→1.0 con overshoot leve · `easeOutBack` |
+| Floating (bob) | Sprite Pokémon, ícono de clima, imagen de edad | Loop `reverse` suave · `easeInOut` |
+| Entrada escalonada | Listas (universidades, noticias, pronóstico) | Fade + slide-up 18px · *stagger* ~70ms · `easeOutCubic` |
+| Anillo giratorio | Avatar de "Acerca de" | Rotación continua de `SweepGradient` dorado · 8s |
+| Micro-interacción | Filas de contacto, cartas presionadas | Cambio de fondo + deslizamiento · `easeOut` · 150ms |
+
+## Reglas de movimiento
+
+- **Curvas, no lineal.** `easeOutCubic` para entradas, `easeOutBack` para acentos "pop", `linear` solo para loops mecánicos.
+- **Spring sutil > rebote grande.** El "pop" usa overshoot pequeño (escala `0.8 → 1.0`), nunca rebotes exagerados.
+- **Combina opacidad + desplazamiento corto** (fade + slide-up de 16–18px).
+- **Duraciones cortas:** micro-interacción 120–220ms · transición de elemento 250–480ms.
+- **Stagger pequeño** (≈70ms por ítem) para que las listas entren juntas pero no idénticas.
+- **Un protagonista por pantalla;** el resto acompaña.
+- Todos los `AnimationController` se liberan con `dispose()`.
+
+---
+
+# Componentes vectoriales (CustomPainter)
+
+Reutilizables, sin assets binarios:
+
+- **`Toolbox`** — caja de herramientas con tapa animable en 3D.
+- **`GarageBackground`** — escena completa del garaje + banco de trabajo + herramientas del *pegboard*.
+- **`ScreenPreview`** — mini-mockup representativo de una pantalla (barra superior, ícono central y líneas de contenido) para las cartas del abanico.
+- **`PokeballIcon`** — pokébola con mitad superior coloreada y mitad inferior blanca, banda y botón central.
+
+# Helpers de animación reutilizables
+
+- **`Appear`** — fade + slide-up con retardo escalonado por `index`.
+- **`CountUp`** — número que cuenta desde 0 hasta un valor.
+- **`PopIn`** — escala + fade con overshoot leve.
+- **`Floating`** — flotación vertical continua y suave.
