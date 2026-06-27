@@ -16,7 +16,7 @@ El APK compilado está disponible en la raíz del repositorio: `toolbox_app.apk`
 | **Clima en RD** | Temperatura actual, humedad, viento y pronóstico de 3 días para Santo Domingo | [Open-Meteo](https://open-meteo.com/) |
 | **Pokémon** | Información, tipos, estadísticas, imagen oficial y reproducción del grito | [PokéAPI](https://pokeapi.co/) |
 | **Noticias WordPress** | Últimas 3 publicaciones del blog con imagen destacada y enlace al artículo | [tecnologia21.com](https://tecnologia21.com) (REST API) |
-| **Acerca de** | Pantalla de contacto con datos personales, redes y foto de perfil | — |
+| **Acerca de** | Pantalla de contacto y presentación del desarrollador | — |
 
 ## Características técnicas
 
@@ -97,16 +97,6 @@ flutter build apk --release
 | `audioplayers` | Reproducir sonidos de Pokémon |
 | `cached_network_image` | Caché de imágenes de red |
 | `url_launcher` | Abrir URLs, correo y teléfono |
-
-## Personalización
-
-Los datos de la pantalla **Acerca de** son editables en `toolbox_app/lib/screens/about_screen.dart`:
-
-- Nombre completo
-- Matrícula
-- Email, teléfono
-- Enlaces de GitHub y LinkedIn
-- URL de la foto de perfil
 
 ## Diseño
 
