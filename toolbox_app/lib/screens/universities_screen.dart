@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'package:url_launcher/url_launcher.dart';
 import '../theme/app_theme.dart';
+import '../widgets/appear.dart';
 
 class UniversitiesScreen extends StatefulWidget {
   const UniversitiesScreen({super.key});
@@ -99,7 +100,9 @@ class _UniversitiesScreenState extends State<UniversitiesScreen> {
                 final domains = (u['domains'] as List?)?.join(', ') ?? '';
                 final webPages = u['web_pages'] as List?;
                 final url = webPages != null && webPages.isNotEmpty ? webPages[0] as String : null;
-                return AppCard(
+                return Appear(
+                  index: i < 8 ? i : 0,
+                  child: AppCard(
                   padding: const EdgeInsets.all(16),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -133,6 +136,7 @@ class _UniversitiesScreenState extends State<UniversitiesScreen> {
                       ],
                     ],
                   ),
+                ),
                 );
               },
             ),

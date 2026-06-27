@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import '../theme/app_theme.dart';
+import '../widgets/anim.dart';
 
 class GenderScreen extends StatefulWidget {
   const GenderScreen({super.key});
@@ -81,7 +82,8 @@ class _GenderScreenState extends State<GenderScreen> {
             ],
             if (_result != null) ...[
               const SizedBox(height: 24),
-              AppCard(
+              PopIn(
+                child: AppCard(
                 child: Column(
                   children: [
                     const SizedBox(height: 8),
@@ -114,6 +116,7 @@ class _GenderScreenState extends State<GenderScreen> {
                     const SizedBox(height: 8),
                   ],
                 ),
+              ),
               ),
             ],
           ],

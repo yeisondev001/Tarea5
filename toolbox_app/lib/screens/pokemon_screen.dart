@@ -4,6 +4,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'package:audioplayers/audioplayers.dart';
 import '../theme/app_theme.dart';
+import '../widgets/anim.dart';
+import '../widgets/appear.dart';
 
 class PokemonScreen extends StatefulWidget {
   const PokemonScreen({super.key});
@@ -92,7 +94,7 @@ class _PokemonScreenState extends State<PokemonScreen> {
           ),
           if (_loading) const Expanded(child: Center(child: CircularProgressIndicator(color: AppColors.primary))),
           if (_error != null) Expanded(child: Center(child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-            const Icon(Icons.catching_pokemon, size: 48, color: AppColors.onSurfaceVariant),
+            const PokeballIcon(size: 56),
             const SizedBox(height: 12),
             Text(_error!, style: GoogleFonts.inter(color: AppColors.error)),
           ]))),
@@ -101,12 +103,16 @@ class _PokemonScreenState extends State<PokemonScreen> {
               padding: const EdgeInsets.all(16),
               child: Column(
                 children: [
-                  AppCard(
+                  Appear(
+                    index: 0,
+                    child: AppCard(
                     padding: const EdgeInsets.all(24),
                     child: Column(
                       children: [
                         if (imageUrl != null)
-                          Container(
+                          Floating(
+                            amplitude: 7,
+                            child: Container(
                             decoration: BoxDecoration(
                               color: AppColors.primary.withOpacity(0.08),
                               shape: BoxShape.circle,
@@ -114,6 +120,7 @@ class _PokemonScreenState extends State<PokemonScreen> {
                             ),
                             padding: const EdgeInsets.all(16),
                             child: Image.network(imageUrl, height: 140, fit: BoxFit.contain),
+                          ),
                           ),
                         const SizedBox(height: 16),
                         Text(
@@ -131,8 +138,11 @@ class _PokemonScreenState extends State<PokemonScreen> {
                       ],
                     ),
                   ),
+                  ),
                   const SizedBox(height: 12),
-                  AppCard(
+                  Appear(
+                    index: 1,
+                    child: AppCard(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -144,8 +154,11 @@ class _PokemonScreenState extends State<PokemonScreen> {
                       ],
                     ),
                   ),
+                  ),
                   const SizedBox(height: 12),
-                  if (abilities != null) AppCard(
+                  if (abilities != null) Appear(
+                    index: 2,
+                    child: AppCard(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -159,14 +172,18 @@ class _PokemonScreenState extends State<PokemonScreen> {
                       ],
                     ),
                   ),
+                  ),
                   const SizedBox(height: 16),
-                  SizedBox(
+                  Appear(
+                    index: 3,
+                    child: SizedBox(
                     width: double.infinity,
                     child: ElevatedButton.icon(
                       onPressed: _playing ? null : _playSound,
                       icon: Icon(_playing ? Icons.volume_up : Icons.play_circle_outline),
                       label: Text(_playing ? 'Reproduciendo...' : 'Escuchar sonido'),
                     ),
+                  ),
                   ),
                   const SizedBox(height: 8),
                 ],
@@ -177,6 +194,53 @@ class _PokemonScreenState extends State<PokemonScreen> {
       ),
     );
   }
+}
+
+/// Pokébola vectorial: mitad superior coloreada (oscura) y mitad inferior blanca.
+class PokeballIcon extends StatelessWidget {
+  final double size;
+  const PokeballIcon({super.key, this.size = 56});
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(width: size, height: size, child: CustomPaint(painter: _PokeballPainter()));
+  }
+}
+
+class _PokeballPainter extends CustomPainter {
+  static const _top = Color(0xFFD8362B);    // mitad de arriba (oscura/roja)
+  static const _bottom = Color(0xFFECECEC); // mitad de abajo (blanca)
+  static const _line = Color(0xFF1A1A1A);   // banda y contornos
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final r = size.width / 2;
+    final c = Offset(r, r);
+
+    // mitad inferior blanca (círculo completo de base)
+    canvas.drawCircle(c, r, Paint()..color = _bottom);
+
+    // mitad superior coloreada (recortando la parte de arriba)
+    canvas.save();
+    canvas.clipRect(Rect.fromLTWH(0, 0, size.width, r));
+    canvas.drawCircle(c, r, Paint()..color = _top);
+    canvas.restore();
+
+    // banda central
+    final bandH = r * 0.20;
+    canvas.drawRect(Rect.fromLTWH(0, c.dy - bandH / 2, size.width, bandH), Paint()..color = _line);
+
+    // botón central
+    canvas.drawCircle(c, r * 0.26, Paint()..color = _line);
+    canvas.drawCircle(c, r * 0.18, Paint()..color = _bottom);
+    canvas.drawCircle(c, r * 0.10, Paint()..color = _line.withOpacity(0.25)..style = PaintingStyle.stroke..strokeWidth = 1.5);
+
+    // contorno
+    canvas.drawCircle(c, r - 0.75, Paint()..color = _line..style = PaintingStyle.stroke..strokeWidth = 1.5);
+  }
+
+  @override
+  bool shouldRepaint(covariant _PokeballPainter oldDelegate) => false;
 }
 
 class _StatRow extends StatelessWidget {

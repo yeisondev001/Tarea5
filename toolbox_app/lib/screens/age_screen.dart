@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import '../theme/app_theme.dart';
+import '../widgets/anim.dart';
 
 class AgeScreen extends StatefulWidget {
   const AgeScreen({super.key});
@@ -87,17 +88,23 @@ class _AgeScreenState extends State<AgeScreen> {
             ],
             if (_result != null && age != null) ...[
               const SizedBox(height: 24),
-              AppCard(
+              PopIn(
+                child: AppCard(
                 child: Column(
                   children: [
                     const SizedBox(height: 8),
-                    Image.network(_imgUrl(age), height: 110,
-                      errorBuilder: (_, __, ___) => Icon(_icon(age), size: 80, color: _color(age))),
+                    Floating(
+                      amplitude: 6,
+                      child: Image.network(_imgUrl(age), height: 110,
+                        errorBuilder: (_, __, ___) => Icon(_icon(age), size: 80, color: _color(age))),
+                    ),
                     const SizedBox(height: 16),
                     Text(_result!['name'] ?? '',
                       style: GoogleFonts.inter(fontSize: 24, fontWeight: FontWeight.w700, color: AppColors.onSurface)),
                     const SizedBox(height: 4),
-                    Text('$age años',
+                    CountUp(
+                      value: age,
+                      suffix: ' años',
                       style: GoogleFonts.inter(fontSize: 52, fontWeight: FontWeight.w800, color: _color(age)),
                     ),
                     const SizedBox(height: 8),
@@ -117,6 +124,7 @@ class _AgeScreenState extends State<AgeScreen> {
                     const SizedBox(height: 8),
                   ],
                 ),
+              ),
               ),
             ],
           ],

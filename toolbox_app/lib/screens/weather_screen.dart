@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import '../theme/app_theme.dart';
+import '../widgets/anim.dart';
+import '../widgets/appear.dart';
 
 class WeatherScreen extends StatefulWidget {
   const WeatherScreen({super.key});
@@ -99,10 +101,14 @@ class _WeatherScreenState extends State<WeatherScreen> {
                               ],
                             ),
                             const SizedBox(height: 24),
-                            Icon(_icon(wcode), size: 64, color: AppColors.primary),
+                            Floating(child: Icon(_icon(wcode), size: 64, color: AppColors.primary)),
                             const SizedBox(height: 12),
-                            Text('${current?['temperature_2m']}°C',
-                              style: GoogleFonts.inter(fontSize: 56, fontWeight: FontWeight.w800, color: AppColors.onSurface)),
+                            CountUp(
+                              value: (current?['temperature_2m'] as num?) ?? 0,
+                              decimals: 1,
+                              suffix: '°C',
+                              style: GoogleFonts.inter(fontSize: 56, fontWeight: FontWeight.w800, color: AppColors.onSurface),
+                            ),
                             const SizedBox(height: 4),
                             Text(_desc(wcode),
                               style: GoogleFonts.inter(color: AppColors.onSurfaceVariant, fontSize: 16)),
@@ -129,7 +135,9 @@ class _WeatherScreenState extends State<WeatherScreen> {
                           final max  = daily['temperature_2m_max'][i];
                           final min  = daily['temperature_2m_min'][i];
                           final date = daily['time'][i] as String;
-                          return Padding(
+                          return Appear(
+                            index: i,
+                            child: Padding(
                             padding: const EdgeInsets.only(bottom: 8),
                             child: AppCard(
                               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
@@ -148,6 +156,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
                                 ],
                               ),
                             ),
+                          ),
                           );
                         },
                       ),

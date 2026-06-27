@@ -1,18 +1,59 @@
+import 'dart:math' as math;
+import 'dart:ui' show lerpDouble;
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../theme/app_theme.dart';
 
-class AboutScreen extends StatelessWidget {
+class AboutScreen extends StatefulWidget {
   const AboutScreen({super.key});
 
-  static const String _name     = 'Tu Nombre Completo';
-  static const String _matricula= '2X-XXXX';
-  static const String _email    = 'tuemail@ejemplo.com';
-  static const String _phone    = '+1 (809) XXX-XXXX';
-  static const String _github   = 'https://github.com/tuusuario';
+  static const String _name = 'Tu Nombre Completo';
+  static const String _matricula = '2X-XXXX';
+  static const String _email = 'tuemail@ejemplo.com';
+  static const String _phone = '+1 (809) XXX-XXXX';
+  static const String _github = 'https://github.com/tuusuario';
   static const String _linkedin = 'https://linkedin.com/in/tuusuario';
   static const String _photoUrl = 'https://via.placeholder.com/200x200.png?text=Foto';
+
+  @override
+  State<AboutScreen> createState() => _AboutScreenState();
+}
+
+class _AboutScreenState extends State<AboutScreen> with TickerProviderStateMixin {
+  late final AnimationController _entrance; // entrada coreografiada (una vez)
+  late final AnimationController _ring;     // anillo dorado girando (loop)
+
+  @override
+  void initState() {
+    super.initState();
+    _entrance = AnimationController(vsync: this, duration: const Duration(milliseconds: 1300))..forward();
+    _ring = AnimationController(vsync: this, duration: const Duration(seconds: 8))..repeat();
+  }
+
+  @override
+  void dispose() {
+    _entrance.dispose();
+    _ring.dispose();
+    super.dispose();
+  }
+
+  /// Revela [child] con fade + slide-up, escalonado según [i].
+  Widget _reveal(int i, Widget child) {
+    final start = (0.12 + i * 0.12).clamp(0.0, 0.85);
+    return AnimatedBuilder(
+      animation: _entrance,
+      builder: (context, c) {
+        final t = Interval(start, (start + 0.45).clamp(0.0, 1.0), curve: Curves.easeOutCubic)
+            .transform(_entrance.value);
+        return Opacity(
+          opacity: t,
+          child: Transform.translate(offset: Offset(0, (1 - t) * 16), child: c),
+        );
+      },
+      child: child,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,86 +64,157 @@ class AboutScreen extends StatelessWidget {
         child: Column(
           children: [
             const SizedBox(height: 8),
-            Center(
-              child: Stack(
-                children: [
-                  CircleAvatar(
-                    radius: 56,
-                    backgroundColor: AppColors.surfaceHighest,
-                    backgroundImage: NetworkImage(_photoUrl),
-                  ),
-                  Positioned(
-                    bottom: 0, right: 0,
-                    child: Container(
-                      padding: const EdgeInsets.all(4),
-                      decoration: BoxDecoration(
-                        color: AppColors.primary,
-                        shape: BoxShape.circle,
-                        border: Border.all(color: AppColors.background, width: 2),
-                      ),
-                      child: const Icon(Icons.check, color: AppColors.onPrimary, size: 12),
-                    ),
-                  ),
-                ],
-              ),
-            ),
+            _avatar(),
             const SizedBox(height: 16),
-            Text(_name, style: GoogleFonts.inter(fontSize: 22, fontWeight: FontWeight.w700, color: AppColors.onSurface)),
+            _reveal(1, Text(AboutScreen._name,
+                style: GoogleFonts.inter(fontSize: 22, fontWeight: FontWeight.w700, color: AppColors.onSurface))),
             const SizedBox(height: 4),
-            AppChip('Matrícula: $_matricula'),
+            _reveal(2, AppChip('Matrícula: ${AboutScreen._matricula}')),
             const SizedBox(height: 24),
-            AppCard(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text('CONTACTO', style: GoogleFonts.inter(color: AppColors.onSurfaceVariant, fontSize: 11, fontWeight: FontWeight.w600, letterSpacing: 0.05)),
-                  const SizedBox(height: 16),
-                  _ContactItem(Icons.email_outlined,  'Email',    _email,    'mailto:$_email'),
-                  const Divider(),
-                  _ContactItem(Icons.phone_outlined,  'Teléfono', _phone,    'tel:$_phone'),
-                  const Divider(),
-                  _ContactItem(Icons.code,            'GitHub',   _github,   _github),
-                  const Divider(),
-                  _ContactItem(Icons.work_outline,    'LinkedIn', _linkedin, _linkedin),
-                ],
-              ),
-            ),
+            _reveal(3, _contactCard()),
             const SizedBox(height: 12),
-            AppCard(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text('SOBRE MÍ', style: GoogleFonts.inter(color: AppColors.onSurfaceVariant, fontSize: 11, fontWeight: FontWeight.w600, letterSpacing: 0.05)),
-                  const SizedBox(height: 12),
-                  Text(
-                    'Estudiante de desarrollo de aplicaciones móviles, apasionado por la tecnología y el software. '
-                    'Disponible para oportunidades laborales y proyectos freelance.',
-                    style: GoogleFonts.inter(color: AppColors.onSurface, fontSize: 14, height: 1.6),
-                  ),
-                ],
-              ),
-            ),
+            _reveal(4, _aboutCard()),
             const SizedBox(height: 12),
-            AppCard(
-              padding: const EdgeInsets.all(14),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Icon(Icons.flutter_dash, color: AppColors.primary, size: 16),
-                  const SizedBox(width: 8),
-                  Text('Hecho con Flutter • Tarea 6', style: GoogleFonts.inter(color: AppColors.onSurfaceVariant, fontSize: 12)),
-                ],
-              ),
-            ),
+            _reveal(5, _footer()),
             const SizedBox(height: 16),
           ],
         ),
       ),
     );
   }
+
+  // ---------- AVATAR con anillo girando + pop de entrada ----------
+  Widget _avatar() {
+    return AnimatedBuilder(
+      animation: _entrance,
+      builder: (context, child) {
+        // pop con leve overshoot (easeOutBack puede pasar de 1.0)
+        final t = Interval(0.0, 0.5, curve: Curves.easeOutBack).transform(_entrance.value);
+        return Opacity(
+          opacity: t.clamp(0.0, 1.0),
+          child: Transform.scale(scale: lerpDouble(0.9, 1.0, t)!, child: child),
+        );
+      },
+      child: Center(
+        child: SizedBox(
+          width: 132,
+          height: 132,
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              // anillo de gradiente dorado girando
+              AnimatedBuilder(
+                animation: _ring,
+                builder: (context, _) => Transform.rotate(
+                  angle: _ring.value * 2 * math.pi,
+                  child: Container(
+                    width: 132,
+                    height: 132,
+                    decoration: const BoxDecoration(
+                      shape: BoxShape.circle,
+                      gradient: SweepGradient(
+                        colors: [
+                          AppColors.primary,
+                          Colors.transparent,
+                          AppColors.primaryContainer,
+                          Colors.transparent,
+                          AppColors.primary,
+                        ],
+                        stops: [0.0, 0.28, 0.5, 0.72, 1.0],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              // máscara interior (deja el anillo fino)
+              Container(
+                width: 120,
+                height: 120,
+                decoration: const BoxDecoration(shape: BoxShape.circle, color: AppColors.background),
+              ),
+              // foto
+              CircleAvatar(
+                radius: 56,
+                backgroundColor: AppColors.surfaceHighest,
+                backgroundImage: const NetworkImage(AboutScreen._photoUrl),
+              ),
+              // badge de verificado
+              Positioned(
+                bottom: 8,
+                right: 8,
+                child: Container(
+                  padding: const EdgeInsets.all(4),
+                  decoration: BoxDecoration(
+                    color: AppColors.primary,
+                    shape: BoxShape.circle,
+                    border: Border.all(color: AppColors.background, width: 2),
+                  ),
+                  child: const Icon(Icons.check, color: AppColors.onPrimary, size: 12),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _contactCard() {
+    return AppCard(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text('CONTACTO',
+              style: GoogleFonts.inter(color: AppColors.onSurfaceVariant, fontSize: 11, fontWeight: FontWeight.w600, letterSpacing: 0.05)),
+          const SizedBox(height: 12),
+          _ContactItem(Icons.email_outlined, 'Email', AboutScreen._email, 'mailto:${AboutScreen._email}'),
+          const Divider(),
+          _ContactItem(Icons.phone_outlined, 'Teléfono', AboutScreen._phone, 'tel:${AboutScreen._phone}'),
+          const Divider(),
+          _ContactItem(Icons.code, 'GitHub', AboutScreen._github, AboutScreen._github),
+          const Divider(),
+          _ContactItem(Icons.work_outline, 'LinkedIn', AboutScreen._linkedin, AboutScreen._linkedin),
+        ],
+      ),
+    );
+  }
+
+  Widget _aboutCard() {
+    return AppCard(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text('SOBRE MÍ',
+              style: GoogleFonts.inter(color: AppColors.onSurfaceVariant, fontSize: 11, fontWeight: FontWeight.w600, letterSpacing: 0.05)),
+          const SizedBox(height: 12),
+          Text(
+            'Estudiante de desarrollo de aplicaciones móviles, apasionado por la tecnología y el software. '
+            'Disponible para oportunidades laborales y proyectos freelance.',
+            style: GoogleFonts.inter(color: AppColors.onSurface, fontSize: 14, height: 1.6),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _footer() {
+    return AppCard(
+      padding: const EdgeInsets.all(14),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Icon(Icons.flutter_dash, color: AppColors.primary, size: 16),
+          const SizedBox(width: 8),
+          Text('Hecho con Flutter • Tarea 6',
+              style: GoogleFonts.inter(color: AppColors.onSurfaceVariant, fontSize: 12)),
+        ],
+      ),
+    );
+  }
 }
 
-class _ContactItem extends StatelessWidget {
+/// Fila de contacto con microinteracción: al tocar se ilumina y el chevron se desliza.
+class _ContactItem extends StatefulWidget {
   final IconData icon;
   final String label;
   final String value;
@@ -110,24 +222,50 @@ class _ContactItem extends StatelessWidget {
   const _ContactItem(this.icon, this.label, this.value, this.url);
 
   @override
+  State<_ContactItem> createState() => _ContactItemState();
+}
+
+class _ContactItemState extends State<_ContactItem> {
+  bool _pressed = false;
+
+  void _set(bool v) => setState(() => _pressed = v);
+
+  @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 10),
+      onTapDown: (_) => _set(true),
+      onTapCancel: () => _set(false),
+      onTapUp: (_) {
+        _set(false);
+        launchUrl(Uri.parse(widget.url), mode: LaunchMode.externalApplication);
+      },
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 150),
+        curve: Curves.easeOut,
+        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
+        decoration: BoxDecoration(
+          color: _pressed ? AppColors.primary.withOpacity(0.10) : Colors.transparent,
+          borderRadius: BorderRadius.circular(10),
+        ),
         child: Row(
           children: [
-            Icon(icon, color: AppColors.primary, size: 20),
+            Icon(widget.icon, color: AppColors.primary, size: 20),
             const SizedBox(width: 14),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(label, style: GoogleFonts.inter(color: AppColors.onSurfaceVariant, fontSize: 11)),
-                Text(value, style: GoogleFonts.inter(color: AppColors.onSurface, fontSize: 13, fontWeight: FontWeight.w500)),
+                Text(widget.label, style: GoogleFonts.inter(color: AppColors.onSurfaceVariant, fontSize: 11)),
+                Text(widget.value, style: GoogleFonts.inter(color: AppColors.onSurface, fontSize: 13, fontWeight: FontWeight.w500)),
               ],
             ),
             const Spacer(),
-            const Icon(Icons.chevron_right, color: AppColors.outline, size: 18),
+            AnimatedSlide(
+              duration: const Duration(milliseconds: 150),
+              curve: Curves.easeOut,
+              offset: _pressed ? const Offset(0.25, 0) : Offset.zero,
+              child: Icon(Icons.chevron_right,
+                  color: _pressed ? AppColors.primary : AppColors.outline, size: 18),
+            ),
           ],
         ),
       ),

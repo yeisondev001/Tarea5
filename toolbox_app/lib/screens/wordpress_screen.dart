@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'package:url_launcher/url_launcher.dart';
 import '../theme/app_theme.dart';
+import '../widgets/appear.dart';
 
 class WordpressScreen extends StatefulWidget {
   const WordpressScreen({super.key});
@@ -105,7 +106,9 @@ class _WordpressScreenState extends State<WordpressScreen> {
                   }
                 }
 
-                return AppCard(
+                return Appear(
+                  index: i,
+                  child: AppCard(
                   padding: EdgeInsets.zero,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -143,6 +146,7 @@ class _WordpressScreenState extends State<WordpressScreen> {
                       ),
                     ],
                   ),
+                ),
                 );
               },
             ),
