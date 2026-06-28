@@ -116,75 +116,64 @@ sample = (tone + noise) · envelope · 0.65
 
 ## 🏗️ Arquitectura del proyecto
 
-```
-📁 Tarea5/
-│
-├── 📄 README.md                        ← este archivo
-├── 🎨 DESIGN.md                        ← sistema de diseño y movimiento
-├── 📦 toolbox.apk                      ← APK release (49 MB)
-│
-└── 📱 toolbox_app/                     ← Proyecto Flutter
-    │
-    ├── 📄 pubspec.yaml                 ← dependencias y assets
-    │
-    ├── 🖼️  assets/
-    │   ├── images/yeison.jpg           ← foto perfil (único raster)
-    │   └── audio/                      ← 6 WAVs sintetizados + gen_sounds.py
-    │
-    └── 📂 lib/
-        ├── 🚀 main.dart                ← entry point
-        │
-        ├── 🎨 theme/app_theme.dart     ← colores, AppCard, AppChip
-        │
-        ├── 🔊 services/
-        │   └── sound_service.dart      ← singleton: audio + háptica
-        │
-        ├── 🧩 widgets/                 ← componentes reutilizables
-        │   ├── toolbox.dart            ← caja roja (CustomPainter)
-        │   ├── garage_background.dart  ← garaje completo (CustomPainter)
-        │   ├── screen_preview.dart     ← mini-preview dentro de cartas
-        │   ├── appear.dart             ← fade + slide-up escalonado
-        │   └── anim.dart               ← CountUp, PopIn, Floating
-        │
-        └── 📂 screens/                 ← 1 pantalla por herramienta
-            ├── home_screen.dart        ← 🎬 la escena animada
-            ├── gender_screen.dart      ← 👤
-            ├── age_screen.dart         ← 🎂
-            ├── universities_screen.dart ← 🎓
-            ├── weather_screen.dart     ← 🌤️
-            ├── pokemon_screen.dart     ← ⚡
-            ├── wordpress_screen.dart   ← 📰
-            └── about_screen.dart       ← ℹ️
-```
-
----
-
-## 🔄 Flujo de la aplicación
+La app se organiza en **4 capas claramente separadas** — desde lo que ve el usuario hasta los servicios externos:
 
 ```mermaid
-flowchart TD
-    Start(["🚀 main.dart"]) --> Home["🏠 HomeScreen<br/>caja + abanico animado"]
+flowchart TB
+    subgraph L1["🧑 CAPA DE USUARIO"]
+        User(["👆 Toca la pantalla"])
+    end
 
-    Home -->|"toca carta 2 veces"| Sel{"¿Cuál herramienta?"}
+    subgraph L2["🎬 CAPA DE PANTALLAS · lib/screens/"]
+        direction LR
+        HomeS["🏠 home_screen<br/><i>escena animada</i>"]
+        G["👤 gender"]
+        E["🎂 age"]
+        U["🎓 universities"]
+        W["🌤️ weather"]
+        P["⚡ pokemon"]
+        N["📰 wordpress"]
+        A["ℹ️ about"]
+    end
 
-    Sel --> G["👤 Género"]
-    Sel --> E["🎂 Edad"]
-    Sel --> U["🎓 Universidades"]
-    Sel --> W["🌤️ Clima"]
-    Sel --> P["⚡ Pokémon"]
-    Sel --> N["📰 WordPress"]
-    Sel --> A["ℹ️ Acerca de"]
+    subgraph L3["🧩 CAPA DE WIDGETS · lib/widgets/"]
+        direction LR
+        TB["🧰 toolbox<br/><i>CustomPainter</i>"]
+        GB["🏚️ garage_background<br/><i>CustomPainter</i>"]
+        SP["📱 screen_preview"]
+        AN["✨ anim<br/><i>CountUp · PopIn · Float</i>"]
+        AP["📥 appear<br/><i>fade + slide</i>"]
+    end
 
-    G -.->|HTTP GET| API1[("genderize.io")]
-    E -.->|HTTP GET| API2[("agify.io")]
-    U -.->|HTTP GET| API3[("hipolabs")]
-    W -.->|HTTP GET| API4[("open-meteo.com")]
-    P -.->|HTTP GET| API5[("pokeapi.co")]
-    N -.->|HTTP GET| API6[("tecnologia21.com")]
+    subgraph L4["⚙️ CAPA DE SERVICIOS · lib/services/ & theme/"]
+        direction LR
+        SS["🔊 SoundService<br/><i>audio + háptica</i>"]
+        TH["🎨 app_theme<br/><i>colores · AppCard</i>"]
+    end
 
-    style Start fill:#FFE285,color:#3B2F00,stroke:#3B2F00,stroke-width:2px
-    style Home fill:#DE3B2E,color:#fff,stroke:#7E120B,stroke-width:2px
-    style Sel fill:#1E2020,color:#FFE285,stroke:#FFE285
+    subgraph L5["🌍 RECURSOS EXTERNOS"]
+        direction LR
+        APIs[("🌐 6 APIs REST")]
+        Assets[("📦 yeison.jpg<br/>+ 6 WAVs")]
+    end
+
+    User --> HomeS
+    HomeS --> G & E & U & W & P & N & A
+    HomeS -.usa.-> TB & GB & SP
+    G & E & U & W & P & N --> AN & AP
+    HomeS -.dispara.-> SS
+    L2 -.estiliza con.-> TH
+    G & E & U & W & P & N -.fetch.-> APIs
+    SS -.lee.-> Assets
+
+    style L1 fill:#1A1C1D,stroke:#FFE285,stroke-width:2px,color:#FFE285
+    style L2 fill:#1E2020,stroke:#DE3B2E,stroke-width:2px,color:#E2E2E2
+    style L3 fill:#1E2020,stroke:#7BA7E3,stroke-width:2px,color:#E2E2E2
+    style L4 fill:#1E2020,stroke:#9CD67D,stroke-width:2px,color:#E2E2E2
+    style L5 fill:#1E2020,stroke:#CFC6AF,stroke-width:2px,color:#E2E2E2
+
+    style User fill:#FFE285,color:#3B2F00,stroke:#3B2F00,stroke-width:2px
+    style HomeS fill:#DE3B2E,color:#fff,stroke:#7E120B,stroke-width:2px
     style G fill:#282A2B,color:#E2E2E2
     style E fill:#282A2B,color:#E2E2E2
     style U fill:#282A2B,color:#E2E2E2
@@ -192,30 +181,170 @@ flowchart TD
     style P fill:#282A2B,color:#E2E2E2
     style N fill:#282A2B,color:#E2E2E2
     style A fill:#282A2B,color:#E2E2E2
+    style TB fill:#2A3540,color:#A8C8E8
+    style GB fill:#2A3540,color:#A8C8E8
+    style SP fill:#2A3540,color:#A8C8E8
+    style AN fill:#2A3540,color:#A8C8E8
+    style AP fill:#2A3540,color:#A8C8E8
+    style SS fill:#2A4029,color:#B0D69D
+    style TH fill:#2A4029,color:#B0D69D
+    style APIs fill:#333535,color:#CFC6AF
+    style Assets fill:#333535,color:#CFC6AF
 ```
 
-### Anatomía de una animación — la caja cayendo
+<details>
+<summary><b>📂 Ver árbol de archivos completo</b></summary>
+
+```
+📁 Tarea5/
+│
+├── 📄 README.md                        ← este archivo
+├── 🎨 DESIGN.md                        ← sistema de diseño
+├── 📦 toolbox.apk                      ← APK release (49 MB)
+│
+└── 📱 toolbox_app/                     ← Proyecto Flutter
+    │
+    ├── 📄 pubspec.yaml                 ← dependencias y assets
+    │
+    ├── 🖼️  assets/
+    │   ├── images/yeison.jpg           ← foto (único raster)
+    │   └── audio/                      ← 6 WAVs + gen_sounds.py
+    │
+    └── 📂 lib/
+        ├── 🚀 main.dart                ← entry point
+        │
+        ├── 🎨 theme/
+        │   └── app_theme.dart          ← colores, AppCard, AppChip
+        │
+        ├── 🔊 services/
+        │   └── sound_service.dart      ← singleton audio + háptica
+        │
+        ├── 🧩 widgets/
+        │   ├── toolbox.dart            ← caja roja vectorial
+        │   ├── garage_background.dart  ← garaje vectorial
+        │   ├── screen_preview.dart     ← preview en cartas
+        │   ├── appear.dart             ← fade + slide
+        │   └── anim.dart               ← CountUp, PopIn, Floating
+        │
+        └── 📂 screens/                 ← 1 archivo por herramienta
+            ├── home_screen.dart        ← 🎬 escena animada
+            ├── gender_screen.dart      ← 👤
+            ├── age_screen.dart         ← 🎂
+            ├── universities_screen.dart← 🎓
+            ├── weather_screen.dart     ← 🌤️
+            ├── pokemon_screen.dart     ← ⚡
+            ├── wordpress_screen.dart   ← 📰
+            └── about_screen.dart       ← ℹ️
+```
+
+</details>
+
+---
+
+## 🔄 Flujo de la aplicación
+
+### El viaje completo del usuario — desde que abre la app hasta una herramienta
+
+```mermaid
+flowchart TD
+    Start([📱 Usuario abre la app]):::start
+
+    Start --> A1{{"🎬 ESCENA INICIAL"}}:::scene
+
+    A1 --> Fall["🧰 Caja cae del cielo<br/><i>bounceOut · 2.2s</i>"]:::action
+    Fall --> Bounce1["💥 Rebote 1<br/>🔊 thud 100%<br/>📳 vibración fuerte"]:::sound
+    Bounce1 --> Bounce2["💥 Rebote 2<br/>🔊 thud 55%"]:::sound
+    Bounce2 --> Bounce3["💥 Rebote 3<br/>🔊 thud 28%"]:::sound
+    Bounce3 --> Landed["✅ Caja en el banco<br/><i>'Toca la caja para abrir'</i>"]:::idle
+
+    Landed -->|👆 1er toque| Open["📤 Tapa se abre<br/><i>easeOutBack · 750ms</i><br/>🔊 lid_open · 📳 medio"]:::action
+
+    Open --> Fan["🃏🃏🃏🃏🃏🃏🃏<br/>7 cartas en abanico<br/>🔊 fan_spread · 📳 suave"]:::scene
+
+    Fan --> Pick{👆 ¿Qué carta?}:::decision
+
+    Pick -->|toca una carta| Center["🎯 Carta se centra<br/>🔊 card_tap · 📳 clic"]:::action
+    Center -->|👆 2do toque| Expand["🚪 Carta se expande<br/>a pantalla completa<br/>🔊 screen_open"]:::action
+
+    Expand --> Tool{{"🛠️ HERRAMIENTA"}}:::scene
+
+    Tool --> T1["👤 Género<br/>genderize.io"]:::tool
+    Tool --> T2["🎂 Edad<br/>agify.io"]:::tool
+    Tool --> T3["🎓 Universidades<br/>hipolabs"]:::tool
+    Tool --> T4["🌤️ Clima<br/>open-meteo"]:::tool
+    Tool --> T5["⚡ Pokémon<br/>pokeapi"]:::tool
+    Tool --> T6["📰 Noticias<br/>WordPress"]:::tool
+    Tool --> T7["ℹ️ Acerca de<br/>contacto"]:::tool
+
+    T1 & T2 & T3 & T4 & T5 & T6 & T7 -->|⬅️ atrás| Fan
+    Pick -->|👆 toca caja otra vez| Close["🔒 Cartas vuelven<br/>tapa baja<br/>🔊 box_close"]:::action
+    Close --> Landed
+
+    classDef start fill:#FFE285,color:#3B2F00,stroke:#3B2F00,stroke-width:3px
+    classDef scene fill:#DE3B2E,color:#fff,stroke:#7E120B,stroke-width:2px
+    classDef action fill:#2A3540,color:#A8C8E8,stroke:#7BA7E3,stroke-width:1.5px
+    classDef sound fill:#3A2E1A,color:#FFE285,stroke:#FFE285,stroke-width:1.5px
+    classDef idle fill:#1E2020,color:#9FA5A7,stroke:#5A6063,stroke-width:1px,stroke-dasharray:5 3
+    classDef decision fill:#1E2020,color:#FFE285,stroke:#FFE285,stroke-width:2px
+    classDef tool fill:#282A2B,color:#E2E2E2,stroke:#4A4F52
+```
+
+### 🎯 Leyenda
+
+| Color | Significado |
+|:---:|---|
+| 🟡 **Amarillo** | Punto de inicio (usuario) |
+| 🔴 **Rojo** | Escena principal (Home + selección de herramienta) |
+| 🔵 **Azul** | Acción animada |
+| 🟠 **Dorado oscuro** | Momento con sonido + háptica |
+| ⚫ **Gris punteado** | Estado de espera / reposo |
+| 🟢 **Diamante dorado** | Decisión del usuario |
+
+---
+
+### ⚙️ Anatomía técnica — cómo se coordina un rebote
 
 ```mermaid
 sequenceDiagram
-    participant U as Usuario
-    participant H as HomeScreen
-    participant F as _fall Controller<br/>(bounceOut 2.2s)
-    participant S as SoundService
+    autonumber
+    actor U as 👤 Usuario
+    participant H as 🏠 HomeScreen
+    participant F as ⏱️ _fall<br/>AnimationController
+    participant S as 🔊 SoundService
+    participant A as 🎵 audioplayers
+    participant V as 📳 HapticFeedback
 
     U->>H: abre la app
-    H->>F: forward()
-    Note over F: t=0.36 → primer rebote
-    F->>S: play(thud, vol=1.0)
-    S-->>U: 🔊📳 golpe fuerte
-    Note over F: t=0.73 → segundo rebote
-    F->>S: play(thud, vol=0.55)
-    S-->>U: 🔊 golpe medio
-    Note over F: t=0.91 → tercer toque
-    F->>S: play(thud, vol=0.28)
-    S-->>U: 🔊 toque leve
-    F-->>H: completed
-    H->>H: _landed = true ✅
+    H->>F: forward() · 2.2s · bounceOut
+    activate F
+
+    rect rgb(58, 46, 26)
+        Note over F: ⏰ t=0.36 → impacto 1
+        F->>S: play(thud, volume: 1.0)
+        S->>V: heavyImpact()
+        V-->>U: 📳📳📳
+        S->>A: AssetSource('thud.wav')
+        A-->>U: 🔊 ¡PUM!
+    end
+
+    rect rgb(50, 40, 22)
+        Note over F: ⏰ t=0.73 → impacto 2
+        F->>S: play(thud, volume: 0.55)
+        S->>A: AssetSource('thud.wav')
+        A-->>U: 🔊 pum
+    end
+
+    rect rgb(42, 34, 19)
+        Note over F: ⏰ t=0.91 → impacto 3
+        F->>S: play(thud, volume: 0.28)
+        S->>A: AssetSource('thud.wav')
+        A-->>U: 🔊 toc
+    end
+
+    F-->>H: status: completed
+    deactivate F
+    H->>H: setState(_landed = true)
+    Note over H: ✅ Caja asentada · lista para abrir
 ```
 
 ---
