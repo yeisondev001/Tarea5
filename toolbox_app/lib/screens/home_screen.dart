@@ -52,10 +52,10 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    _fall = AnimationController(vsync: this, duration: const Duration(milliseconds: 1200));
+    _fall = AnimationController(vsync: this, duration: const Duration(milliseconds: 2200));
     _fallAnim = Tween<double>(begin: 1, end: 0)
         .animate(CurvedAnimation(parent: _fall, curve: Curves.bounceOut));
-    _open = AnimationController(vsync: this, duration: const Duration(milliseconds: 600));
+    _open = AnimationController(vsync: this, duration: const Duration(milliseconds: 750));
     _lidAnim = CurvedAnimation(parent: _open, curve: Curves.easeOutBack);
     _belt = AnimationController(vsync: this, duration: const Duration(milliseconds: 950));
     _dock = AnimationController(vsync: this, duration: const Duration(milliseconds: 700));
