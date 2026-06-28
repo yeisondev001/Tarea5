@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:animations/animations.dart';
 import '../theme/app_theme.dart';
+import '../services/sound_service.dart';
 import '../widgets/toolbox.dart';
 import '../widgets/screen_preview.dart';
 import '../widgets/garage_background.dart';
@@ -35,6 +36,8 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   bool _firstOpened = false;
   bool _fanWantOpen = false;
 
+  final _snd = SoundService();
+
   static const double _stepAngle = 0.24;
   static const double _pivotRadius = 320;
   static const double _dragUnit = 60;
@@ -64,16 +67,21 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
       });
 
     _fall.addStatusListener((s) {
-      if (s == AnimationStatus.completed) setState(() => _landed = true);
+      if (s == AnimationStatus.completed) {
+        setState(() => _landed = true);
+        _snd.play(AppSound.thud);
+      }
     });
     _open.addStatusListener((s) {
       if (s == AnimationStatus.completed && _fanWantOpen) {
+        _snd.play(AppSound.lidOpen);
         _belt.forward();
         if (_dock.status == AnimationStatus.dismissed) _dock.forward();
       }
     });
     _belt.addStatusListener((s) {
       if (s == AnimationStatus.dismissed && !_fanWantOpen) _open.reverse();
+      if (s == AnimationStatus.completed) _snd.play(AppSound.fanSpread);
     });
 
     _fall.forward();
@@ -374,9 +382,11 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   // 1er toque: selecciona (la trae al frente). 2º toque en la seleccionada: abre.
   void _tapCard(int i, VoidCallback open) {
     if (_selected == i) {
+      _snd.play(AppSound.screenOpen);
       open();
       return;
     }
+    _snd.play(AppSound.cardTap);
     final first = _selected < 0;
     setState(() => _selected = i);
     if (first) {
