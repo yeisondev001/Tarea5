@@ -82,6 +82,23 @@ def screen_open():
         out.append(math.sin(phase) * env * 0.55 * 32767)
     write_wav('screen_open.wav', out)
 
+# 6. box_close — wooden clack (descending 280→90 Hz, soft thud)
+def box_close():
+    dur = 0.18
+    n = int(SR * dur)
+    out = []
+    phase = 0.0
+    for i in range(n):
+        t = i / SR
+        p = t / dur
+        freq = 280 - 190 * p
+        phase += 2*math.pi*freq/SR
+        env = math.exp(-t * 14) * (1 - math.exp(-t * 120))
+        wood = math.sin(phase) * 0.8 + math.sin(phase*2) * 0.2
+        noise = (random.random()*2-1) * 0.1 * math.exp(-t*30)
+        out.append((wood + noise) * env * 0.6 * 32767)
+    write_wav('box_close.wav', out)
+
 print("Generating sounds...")
 random.seed(42)
 thud()
@@ -89,4 +106,5 @@ lid_open()
 fan_spread()
 card_tap()
 screen_open()
+box_close()
 print("Done!")

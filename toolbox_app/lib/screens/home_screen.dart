@@ -38,6 +38,15 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
 
   final _snd = SoundService();
 
+  // Tiempos (0..1) en los que el rebote toca el suelo en Curves.bounceOut,
+  // con el volumen relativo de cada impacto.
+  static const List<MapEntry<double, double>> _bounceHits = [
+    MapEntry(0.36, 1.00), // primer impacto fuerte
+    MapEntry(0.73, 0.55), // segundo más suave
+    MapEntry(0.91, 0.28), // tercer toque
+  ];
+  int _nextBounce = 0;
+
   static const double _stepAngle = 0.24;
   static const double _pivotRadius = 320;
   static const double _dragUnit = 60;
@@ -66,17 +75,26 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
         });
       });
 
-    _fall.addStatusListener((s) {
-      if (s == AnimationStatus.completed) {
-        setState(() => _landed = true);
-        _snd.play(AppSound.thud);
+    // Dispara el "thud" en cada rebote real de la caída.
+    _fall.addListener(() {
+      while (_nextBounce < _bounceHits.length &&
+          _fall.value >= _bounceHits[_nextBounce].key) {
+        _snd.play(AppSound.thud, volume: _bounceHits[_nextBounce].value);
+        _nextBounce++;
       }
+    });
+    _fall.addStatusListener((s) {
+      if (s == AnimationStatus.completed) setState(() => _landed = true);
     });
     _open.addStatusListener((s) {
       if (s == AnimationStatus.completed && _fanWantOpen) {
         _snd.play(AppSound.lidOpen);
         _belt.forward();
         if (_dock.status == AnimationStatus.dismissed) _dock.forward();
+      }
+      // tapa terminó de cerrarse
+      if (s == AnimationStatus.dismissed && _firstOpened && !_fanWantOpen) {
+        _snd.play(AppSound.boxClose);
       }
     });
     _belt.addStatusListener((s) {

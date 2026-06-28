@@ -1,7 +1,7 @@
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/services.dart';
 
-enum AppSound { thud, lidOpen, fanSpread, cardTap, screenOpen }
+enum AppSound { thud, lidOpen, fanSpread, cardTap, screenOpen, boxClose }
 
 class SoundService {
   static final SoundService _i = SoundService._();
@@ -16,6 +16,7 @@ class SoundService {
     AppSound.fanSpread:  'audio/fan_spread.wav',
     AppSound.cardTap:    'audio/card_tap.wav',
     AppSound.screenOpen: 'audio/screen_open.wav',
+    AppSound.boxClose:   'audio/box_close.wav',
   };
 
   static const _haptics = {
@@ -24,13 +25,15 @@ class SoundService {
     AppSound.fanSpread:  _HapticType.light,
     AppSound.cardTap:    _HapticType.selection,
     AppSound.screenOpen: _HapticType.light,
+    AppSound.boxClose:   _HapticType.medium,
   };
 
-  Future<void> play(AppSound sound) async {
+  Future<void> play(AppSound sound, {double volume = 1.0}) async {
     _triggerHaptic(_haptics[sound]!);
     if (!enabled) return;
     try {
       final player = AudioPlayer();
+      await player.setVolume(volume.clamp(0.0, 1.0));
       await player.play(AssetSource(_files[sound]!));
       player.onPlayerComplete.listen((_) => player.dispose());
     } catch (_) {}
