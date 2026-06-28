@@ -186,17 +186,15 @@ flowchart TD
 
 ```mermaid
 flowchart LR
-    A([📱 Abrir app]):::start --> B[🧰 Caja cae]:::main
-    B --> C[👆 Tocar caja]:::main
-    C --> D[🃏 Abanico de cartas]:::main
-    D --> E[👆 Elegir herramienta]:::main
-    E --> F([🛠️ Herramienta]):::end
+    A([📱 Abrir app]):::startNode --> B[🧰 Caja cae]:::mainNode
+    B --> C[👆 Tocar caja]:::mainNode
+    C --> D[🃏 Abanico de cartas]:::mainNode
+    D --> E[👆 Elegir herramienta]:::mainNode
+    E --> F([🛠️ Herramienta]):::finishNode
 
-    style A fill:#FFE285,color:#3B2F00,stroke:#3B2F00,stroke-width:2px
-    style F fill:#DE3B2E,color:#fff,stroke:#7E120B,stroke-width:2px
-    classDef start fill:#FFE285,color:#3B2F00,stroke:#3B2F00,stroke-width:2px
-    classDef main fill:#282A2B,color:#E2E2E2,stroke:#4A4F52,stroke-width:1.5px
-    classDef end fill:#DE3B2E,color:#fff,stroke:#7E120B,stroke-width:2px
+    classDef startNode fill:#FFE285,color:#3B2F00,stroke:#3B2F00,stroke-width:2px
+    classDef mainNode fill:#282A2B,color:#E2E2E2,stroke:#4A4F52,stroke-width:1.5px
+    classDef finishNode fill:#DE3B2E,color:#fff,stroke:#7E120B,stroke-width:2px
 ```
 
 ---
