@@ -203,63 +203,21 @@ flowchart TD
 ## 🔄 Flujo de la aplicación
 
 ```mermaid
-flowchart LR
-    A([📱 Abrir app]):::startNode --> B[🧰 Caja cae]:::mainNode
-    B --> C[👆 Tocar caja]:::mainNode
-    C --> D[🃏 Abanico de cartas]:::mainNode
-    D --> E[👆 Elegir herramienta]:::mainNode
-    E --> F([🛠️ Herramienta]):::finishNode
+flowchart TD
+    A(["📱 1 · Abres la app"]):::startNode
+    B["🧰 2 · La caja roja cae del cielo<br/><sub>rebota 3 veces sobre el banco · 🔊 thud × 3</sub>"]:::mainNode
+    C["👆 3 · Tocas la caja<br/><sub>la tapa se abre con un chirrido · 🔊 lid_open</sub>"]:::mainNode
+    D["🃏 4 · 7 cartas salen en abanico<br/><sub>una herramienta por carta · 🔊 fan_spread</sub>"]:::mainNode
+    E["👆 5 · Eliges una carta<br/><sub>se centra al tocarla · 2do toque la expande</sub>"]:::mainNode
+    F(["🛠️ 6 · La herramienta llena la pantalla"]):::finishNode
 
-    classDef startNode fill:#FFE285,color:#3B2F00,stroke:#3B2F00,stroke-width:2px
-    classDef mainNode fill:#282A2B,color:#E2E2E2,stroke:#4A4F52,stroke-width:1.5px
-    classDef finishNode fill:#DE3B2E,color:#fff,stroke:#7E120B,stroke-width:2px
-```
+    A ==> B ==> C ==> D ==> E ==> F
 
----
+    classDef startNode fill:#FFE285,color:#3B2F00,stroke:#3B2F00,stroke-width:3px
+    classDef mainNode fill:#282A2B,color:#E2E2E2,stroke:#FFE285,stroke-width:1.5px
+    classDef finishNode fill:#DE3B2E,color:#fff,stroke:#7E120B,stroke-width:3px
 
-### ⚙️ Anatomía técnica — cómo se coordina un rebote
-
-```mermaid
-sequenceDiagram
-    autonumber
-    actor U as 👤 Usuario
-    participant H as 🏠 HomeScreen
-    participant F as ⏱️ _fall<br/>AnimationController
-    participant S as 🔊 SoundService
-    participant A as 🎵 audioplayers
-    participant V as 📳 HapticFeedback
-
-    U->>H: abre la app
-    H->>F: forward() · 2.2s · bounceOut
-    activate F
-
-    rect rgb(58, 46, 26)
-        Note over F: ⏰ t=0.36 → impacto 1
-        F->>S: play(thud, volume: 1.0)
-        S->>V: heavyImpact()
-        V-->>U: 📳📳📳
-        S->>A: AssetSource('thud.wav')
-        A-->>U: 🔊 ¡PUM!
-    end
-
-    rect rgb(50, 40, 22)
-        Note over F: ⏰ t=0.73 → impacto 2
-        F->>S: play(thud, volume: 0.55)
-        S->>A: AssetSource('thud.wav')
-        A-->>U: 🔊 pum
-    end
-
-    rect rgb(42, 34, 19)
-        Note over F: ⏰ t=0.91 → impacto 3
-        F->>S: play(thud, volume: 0.28)
-        S->>A: AssetSource('thud.wav')
-        A-->>U: 🔊 toc
-    end
-
-    F-->>H: status: completed
-    deactivate F
-    H->>H: setState(_landed = true)
-    Note over H: ✅ Caja asentada · lista para abrir
+    linkStyle 0,1,2,3,4 stroke:#FFE285,stroke-width:2.5px
 ```
 
 ---
