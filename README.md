@@ -118,28 +118,38 @@ sample = (tone + noise) · envelope · 0.65
 
 ```mermaid
 flowchart TD
-    A[👤 Usuario]:::user
-    B[🎬 Pantallas]:::screens
-    C[🧩 Widgets]:::widgets
-    D[⚙️ Servicios]:::services
-    E[🌍 APIs y Assets]:::external
+    A(["👤 Usuario"]):::user
+    B["🎬 Pantallas<br/><sub>8 screens</sub>"]:::screens
+    C["🧩 Widgets<br/><sub>vectoriales + animaciones</sub>"]:::widgets
+    D["⚙️ Servicios<br/><sub>audio · háptica · tema</sub>"]:::services
 
-    A --> B --> C --> D --> E
+    A ==> B
+    B ==> C
+    C ==> D
+    D ==> Assets[("📦 Assets locales<br/>fotos · sonidos")]:::assets
+    D ==> APIs{{🌍 APIs externas}}:::apihub
 
-    E --> API1[🌐 genderize.io]:::api
-    E --> API2[🌐 agify.io]:::api
-    E --> API3[🌐 universities hipolabs]:::api
-    E --> API4[🌐 open-meteo.com]:::api
-    E --> API5[🌐 pokeapi.co]:::api
-    E --> API6[🌐 tecnologia21.com]:::api
+    APIs --> API1[🌐 genderize.io]:::api
+    APIs --> API2[🌐 agify.io]:::api
+    APIs --> API3[🌐 hipolabs]:::api
+    APIs --> API4[🌐 open-meteo]:::api
+    APIs --> API5[🌐 pokeapi]:::api
+    APIs --> API6[🌐 tecnologia21]:::api
 
-    classDef user fill:#FFE285,color:#3B2F00,stroke:#3B2F00,stroke-width:2px
+    classDef user fill:#FFE285,color:#3B2F00,stroke:#3B2F00,stroke-width:3px
     classDef screens fill:#DE3B2E,color:#fff,stroke:#7E120B,stroke-width:2px
     classDef widgets fill:#2A3540,color:#A8C8E8,stroke:#7BA7E3,stroke-width:2px
     classDef services fill:#2A4029,color:#B0D69D,stroke:#9CD67D,stroke-width:2px
-    classDef external fill:#333535,color:#CFC6AF,stroke:#CFC6AF,stroke-width:2px
+    classDef assets fill:#3A2E1A,color:#FFE285,stroke:#FFE285,stroke-width:2px
+    classDef apihub fill:#333535,color:#CFC6AF,stroke:#CFC6AF,stroke-width:2px
     classDef api fill:#1E2A30,color:#A8D4E8,stroke:#5A9BB8,stroke-width:1.5px
+
+    linkStyle 0,1,2,3,4 stroke:#FFE285,stroke-width:2px
+    linkStyle 5,6,7,8,9,10 stroke:#5A9BB8,stroke-width:1.5px,stroke-dasharray:3 3
 ```
+
+> 🟡 **Líneas continuas doradas** = dentro de la app (datos que fluyen capa por capa)
+> 🔵 **Líneas punteadas azules** = peticiones HTTP a internet
 
 <details>
 <summary><b>📂 Ver árbol de archivos completo</b></summary>
