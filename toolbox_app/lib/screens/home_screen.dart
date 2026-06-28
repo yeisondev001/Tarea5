@@ -145,7 +145,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     return Scaffold(
       body: Stack(
         children: [
-          const GarageBackground(),
+          const RepaintBoundary(child: GarageBackground()),
 
           // ABANICO (sobre la mesa) — solo cuando ya se abrió alguna vez
           if (_firstOpened)

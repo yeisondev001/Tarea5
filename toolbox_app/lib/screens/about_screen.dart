@@ -8,13 +8,13 @@ import '../theme/app_theme.dart';
 class AboutScreen extends StatefulWidget {
   const AboutScreen({super.key});
 
-  static const String _name = 'Tu Nombre Completo';
-  static const String _matricula = '2X-XXXX';
-  static const String _email = 'tuemail@ejemplo.com';
-  static const String _phone = '+1 (809) XXX-XXXX';
-  static const String _github = 'https://github.com/tuusuario';
-  static const String _linkedin = 'https://linkedin.com/in/tuusuario';
-  static const String _photoUrl = 'https://via.placeholder.com/200x200.png?text=Foto';
+  static const String _name = 'Yeison Gregori Rojas Henríquez';
+  static const String _matricula = '20241822';
+  static const String _email = 'yeisonrojass03@gmail.com';
+  static const String _phone = '+1 (829) 801-9374';
+  static const String _github = 'https://github.com/yeisondev001';
+  static const String _linkedin = 'https://www.linkedin.com/in/yeison-rojas-henriquez';
+  static const String _photoAsset = 'assets/images/yeison.jpg';
 
   @override
   State<AboutScreen> createState() => _AboutScreenState();
@@ -133,10 +133,16 @@ class _AboutScreenState extends State<AboutScreen> with TickerProviderStateMixin
                 decoration: const BoxDecoration(shape: BoxShape.circle, color: AppColors.background),
               ),
               // foto
-              CircleAvatar(
-                radius: 56,
-                backgroundColor: AppColors.surfaceHighest,
-                backgroundImage: const NetworkImage(AboutScreen._photoUrl),
+              ClipOval(
+                child: SizedBox(
+                  width: 112,
+                  height: 112,
+                  child: Image.asset(
+                    AboutScreen._photoAsset,
+                    fit: BoxFit.cover,
+                    alignment: const Alignment(0, -0.6),
+                  ),
+                ),
               ),
               // badge de verificado
               Positioned(
@@ -171,9 +177,9 @@ class _AboutScreenState extends State<AboutScreen> with TickerProviderStateMixin
           const Divider(),
           _ContactItem(Icons.phone_outlined, 'Teléfono', AboutScreen._phone, 'tel:${AboutScreen._phone}'),
           const Divider(),
-          _ContactItem(Icons.code, 'GitHub', AboutScreen._github, AboutScreen._github),
+          _ContactItem(Icons.code, 'GitHub', 'github.com/yeisondev001', AboutScreen._github),
           const Divider(),
-          _ContactItem(Icons.work_outline, 'LinkedIn', AboutScreen._linkedin, AboutScreen._linkedin),
+          _ContactItem(Icons.work_outline, 'LinkedIn', 'yeison-rojas-henriquez', AboutScreen._linkedin),
         ],
       ),
     );

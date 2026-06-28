@@ -22,8 +22,22 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^6.0.0
+  flutter_launcher_icons: ^0.14.2
 
 flutter:
   uses-material-design: true
   assets:
     - assets/images/
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  web:
+    generate: true
+    background_color: "#121414"
+    theme_color: "#FFE285"
+  image_path: "assets/images/yeison.jpg"
+  remove_alpha_ios: true
+  adaptive_icon_background: "#121414"
+  adaptive_icon_foreground: "assets/images/yeison.jpg"
+
