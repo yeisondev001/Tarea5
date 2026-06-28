@@ -126,11 +126,19 @@ flowchart TD
 
     A --> B --> C --> D --> E
 
+    E --> API1[🌐 genderize.io]:::api
+    E --> API2[🌐 agify.io]:::api
+    E --> API3[🌐 universities hipolabs]:::api
+    E --> API4[🌐 open-meteo.com]:::api
+    E --> API5[🌐 pokeapi.co]:::api
+    E --> API6[🌐 tecnologia21.com]:::api
+
     classDef user fill:#FFE285,color:#3B2F00,stroke:#3B2F00,stroke-width:2px
     classDef screens fill:#DE3B2E,color:#fff,stroke:#7E120B,stroke-width:2px
     classDef widgets fill:#2A3540,color:#A8C8E8,stroke:#7BA7E3,stroke-width:2px
     classDef services fill:#2A4029,color:#B0D69D,stroke:#9CD67D,stroke-width:2px
     classDef external fill:#333535,color:#CFC6AF,stroke:#CFC6AF,stroke-width:2px
+    classDef api fill:#1E2A30,color:#A8D4E8,stroke:#5A9BB8,stroke-width:1.5px
 ```
 
 <details>
