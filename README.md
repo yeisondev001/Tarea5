@@ -116,80 +116,21 @@ sample = (tone + noise) · envelope · 0.65
 
 ## 🏗️ Arquitectura del proyecto
 
-La app se organiza en **4 capas claramente separadas** — desde lo que ve el usuario hasta los servicios externos:
-
 ```mermaid
-flowchart TB
-    subgraph L1["🧑 CAPA DE USUARIO"]
-        User(["👆 Toca la pantalla"])
-    end
+flowchart TD
+    A[👤 Usuario]:::user
+    B[🎬 Pantallas]:::screens
+    C[🧩 Widgets]:::widgets
+    D[⚙️ Servicios]:::services
+    E[🌍 APIs y Assets]:::external
 
-    subgraph L2["🎬 CAPA DE PANTALLAS · lib/screens/"]
-        direction LR
-        HomeS["🏠 home_screen<br/><i>escena animada</i>"]
-        G["👤 gender"]
-        E["🎂 age"]
-        U["🎓 universities"]
-        W["🌤️ weather"]
-        P["⚡ pokemon"]
-        N["📰 wordpress"]
-        A["ℹ️ about"]
-    end
+    A --> B --> C --> D --> E
 
-    subgraph L3["🧩 CAPA DE WIDGETS · lib/widgets/"]
-        direction LR
-        TB["🧰 toolbox<br/><i>CustomPainter</i>"]
-        GB["🏚️ garage_background<br/><i>CustomPainter</i>"]
-        SP["📱 screen_preview"]
-        AN["✨ anim<br/><i>CountUp · PopIn · Float</i>"]
-        AP["📥 appear<br/><i>fade + slide</i>"]
-    end
-
-    subgraph L4["⚙️ CAPA DE SERVICIOS · lib/services/ & theme/"]
-        direction LR
-        SS["🔊 SoundService<br/><i>audio + háptica</i>"]
-        TH["🎨 app_theme<br/><i>colores · AppCard</i>"]
-    end
-
-    subgraph L5["🌍 RECURSOS EXTERNOS"]
-        direction LR
-        APIs[("🌐 6 APIs REST")]
-        Assets[("📦 yeison.jpg<br/>+ 6 WAVs")]
-    end
-
-    User --> HomeS
-    HomeS --> G & E & U & W & P & N & A
-    HomeS -.usa.-> TB & GB & SP
-    G & E & U & W & P & N --> AN & AP
-    HomeS -.dispara.-> SS
-    L2 -.estiliza con.-> TH
-    G & E & U & W & P & N -.fetch.-> APIs
-    SS -.lee.-> Assets
-
-    style L1 fill:#1A1C1D,stroke:#FFE285,stroke-width:2px,color:#FFE285
-    style L2 fill:#1E2020,stroke:#DE3B2E,stroke-width:2px,color:#E2E2E2
-    style L3 fill:#1E2020,stroke:#7BA7E3,stroke-width:2px,color:#E2E2E2
-    style L4 fill:#1E2020,stroke:#9CD67D,stroke-width:2px,color:#E2E2E2
-    style L5 fill:#1E2020,stroke:#CFC6AF,stroke-width:2px,color:#E2E2E2
-
-    style User fill:#FFE285,color:#3B2F00,stroke:#3B2F00,stroke-width:2px
-    style HomeS fill:#DE3B2E,color:#fff,stroke:#7E120B,stroke-width:2px
-    style G fill:#282A2B,color:#E2E2E2
-    style E fill:#282A2B,color:#E2E2E2
-    style U fill:#282A2B,color:#E2E2E2
-    style W fill:#282A2B,color:#E2E2E2
-    style P fill:#282A2B,color:#E2E2E2
-    style N fill:#282A2B,color:#E2E2E2
-    style A fill:#282A2B,color:#E2E2E2
-    style TB fill:#2A3540,color:#A8C8E8
-    style GB fill:#2A3540,color:#A8C8E8
-    style SP fill:#2A3540,color:#A8C8E8
-    style AN fill:#2A3540,color:#A8C8E8
-    style AP fill:#2A3540,color:#A8C8E8
-    style SS fill:#2A4029,color:#B0D69D
-    style TH fill:#2A4029,color:#B0D69D
-    style APIs fill:#333535,color:#CFC6AF
-    style Assets fill:#333535,color:#CFC6AF
+    classDef user fill:#FFE285,color:#3B2F00,stroke:#3B2F00,stroke-width:2px
+    classDef screens fill:#DE3B2E,color:#fff,stroke:#7E120B,stroke-width:2px
+    classDef widgets fill:#2A3540,color:#A8C8E8,stroke:#7BA7E3,stroke-width:2px
+    classDef services fill:#2A4029,color:#B0D69D,stroke:#9CD67D,stroke-width:2px
+    classDef external fill:#333535,color:#CFC6AF,stroke:#CFC6AF,stroke-width:2px
 ```
 
 <details>
