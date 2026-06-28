@@ -40,13 +40,18 @@ class ScreenPreview extends StatelessWidget {
           Expanded(
             child: Center(
               child: Container(
-                padding: const EdgeInsets.all(16),
+                width: 72,
+                height: 72,
+                alignment: Alignment.center,
                 decoration: BoxDecoration(
                   color: AppColors.primary.withOpacity(0.28),
                   shape: BoxShape.circle,
                   border: Border.all(color: AppColors.primary.withOpacity(0.6), width: 1),
                 ),
-                child: Icon(icon, size: 36, color: AppColors.primary),
+                child: Transform.translate(
+                  offset: const Offset(0, -3),
+                  child: Icon(icon, size: 32, color: AppColors.primary),
+                ),
               ),
             ),
           ),

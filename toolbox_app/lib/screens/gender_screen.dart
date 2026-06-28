@@ -107,9 +107,8 @@ class _GenderScreenState extends State<GenderScreen> {
                     const Divider(),
                     const SizedBox(height: 12),
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        _Stat('Probabilidad', '${((_result!['probability'] ?? 0) * 100).toStringAsFixed(1)}%'),
                         _Stat('Muestra', '${_result!['count']} nombres'),
                       ],
                     ),

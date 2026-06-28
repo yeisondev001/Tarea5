@@ -93,11 +93,16 @@ class _WeatherScreenState extends State<WeatherScreen> {
                         child: Column(
                           children: [
                             Row(
+                              mainAxisSize: MainAxisSize.min,
                               children: [
                                 const Icon(Icons.location_on_outlined, color: AppColors.primary, size: 16),
                                 const SizedBox(width: 4),
-                                Text('Santo Domingo, República Dominicana',
-                                  style: GoogleFonts.inter(color: AppColors.onSurfaceVariant, fontSize: 12)),
+                                Flexible(
+                                  child: Text('Santo Domingo, República Dominicana',
+                                    style: GoogleFonts.inter(color: AppColors.onSurfaceVariant, fontSize: 12),
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
                               ],
                             ),
                             const SizedBox(height: 24),
