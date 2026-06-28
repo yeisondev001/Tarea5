@@ -203,22 +203,28 @@ flowchart TD
 ## 🔄 Flujo de la aplicación
 
 ```mermaid
-flowchart TD
-    A(["📱 1 · Abres la app"]):::startNode
-    B["🧰 2 · La caja roja cae del cielo<br/><sub>rebota 3 veces sobre el banco · 🔊 thud × 3</sub>"]:::mainNode
-    C["👆 3 · Tocas la caja<br/><sub>la tapa se abre con un chirrido · 🔊 lid_open</sub>"]:::mainNode
-    D["🃏 4 · 7 cartas salen en abanico<br/><sub>una herramienta por carta · 🔊 fan_spread</sub>"]:::mainNode
-    E["👆 5 · Eliges una carta<br/><sub>se centra al tocarla · 2do toque la expande</sub>"]:::mainNode
-    F(["🛠️ 6 · La herramienta llena la pantalla"]):::finishNode
+flowchart LR
+    A(["📱<br/>Abrir<br/>app"]):::card
+    B(["🧰<br/>Caja cae<br/>+ rebota"]):::card
+    C(["📤<br/>Tapa<br/>abre"]):::card
+    D(["🃏<br/>Abanico<br/>de cartas"]):::card
+    E(["👆<br/>Eliges<br/>una"]):::card
+    F(["🌍<br/>Llama<br/>a la API"]):::card
+    G(["📋<br/>Datos en<br/>pantalla"]):::cardEnd
 
-    A ==> B ==> C ==> D ==> E ==> F
+    A ==> B ==> C ==> D ==> E ==> F ==> G
+    G -.⬅️ volver al abanico.-> D
+    D -.🔒 cerrar caja.-> B
 
-    classDef startNode fill:#FFE285,color:#3B2F00,stroke:#3B2F00,stroke-width:3px
-    classDef mainNode fill:#282A2B,color:#E2E2E2,stroke:#FFE285,stroke-width:1.5px
-    classDef finishNode fill:#DE3B2E,color:#fff,stroke:#7E120B,stroke-width:3px
+    classDef card fill:#282A2B,color:#fff,stroke:#FFE285,stroke-width:2px
+    classDef cardEnd fill:#DE3B2E,color:#fff,stroke:#7E120B,stroke-width:2.5px
 
-    linkStyle 0,1,2,3,4 stroke:#FFE285,stroke-width:2.5px
+    linkStyle 0,1,2,3,4,5 stroke:#FFE285,stroke-width:2.5px
+    linkStyle 6,7 stroke:#7BA7E3,stroke-width:1.5px,stroke-dasharray:4 3
 ```
+
+> 🟡 **Flujo principal:** del arranque hasta ver los datos en pantalla
+> 🔵 **Acciones de retorno:** puedes volver al abanico o cerrar la caja en cualquier momento
 
 ---
 
