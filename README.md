@@ -243,62 +243,20 @@ flowchart TB
 
 ## 🔄 Flujo de la aplicación
 
-### El viaje completo del usuario — desde que abre la app hasta una herramienta
-
 ```mermaid
-flowchart TD
-    Start([📱 Usuario abre la app]):::start
+flowchart LR
+    A([📱 Abrir app]):::start --> B[🧰 Caja cae]:::main
+    B --> C[👆 Tocar caja]:::main
+    C --> D[🃏 Abanico de cartas]:::main
+    D --> E[👆 Elegir herramienta]:::main
+    E --> F([🛠️ Herramienta]):::end
 
-    Start --> A1{{"🎬 ESCENA INICIAL"}}:::scene
-
-    A1 --> Fall["🧰 Caja cae del cielo<br/><i>bounceOut · 2.2s</i>"]:::action
-    Fall --> Bounce1["💥 Rebote 1<br/>🔊 thud 100%<br/>📳 vibración fuerte"]:::sound
-    Bounce1 --> Bounce2["💥 Rebote 2<br/>🔊 thud 55%"]:::sound
-    Bounce2 --> Bounce3["💥 Rebote 3<br/>🔊 thud 28%"]:::sound
-    Bounce3 --> Landed["✅ Caja en el banco<br/><i>'Toca la caja para abrir'</i>"]:::idle
-
-    Landed -->|👆 1er toque| Open["📤 Tapa se abre<br/><i>easeOutBack · 750ms</i><br/>🔊 lid_open · 📳 medio"]:::action
-
-    Open --> Fan["🃏🃏🃏🃏🃏🃏🃏<br/>7 cartas en abanico<br/>🔊 fan_spread · 📳 suave"]:::scene
-
-    Fan --> Pick{👆 ¿Qué carta?}:::decision
-
-    Pick -->|toca una carta| Center["🎯 Carta se centra<br/>🔊 card_tap · 📳 clic"]:::action
-    Center -->|👆 2do toque| Expand["🚪 Carta se expande<br/>a pantalla completa<br/>🔊 screen_open"]:::action
-
-    Expand --> Tool{{"🛠️ HERRAMIENTA"}}:::scene
-
-    Tool --> T1["👤 Género<br/>genderize.io"]:::tool
-    Tool --> T2["🎂 Edad<br/>agify.io"]:::tool
-    Tool --> T3["🎓 Universidades<br/>hipolabs"]:::tool
-    Tool --> T4["🌤️ Clima<br/>open-meteo"]:::tool
-    Tool --> T5["⚡ Pokémon<br/>pokeapi"]:::tool
-    Tool --> T6["📰 Noticias<br/>WordPress"]:::tool
-    Tool --> T7["ℹ️ Acerca de<br/>contacto"]:::tool
-
-    T1 & T2 & T3 & T4 & T5 & T6 & T7 -->|⬅️ atrás| Fan
-    Pick -->|👆 toca caja otra vez| Close["🔒 Cartas vuelven<br/>tapa baja<br/>🔊 box_close"]:::action
-    Close --> Landed
-
-    classDef start fill:#FFE285,color:#3B2F00,stroke:#3B2F00,stroke-width:3px
-    classDef scene fill:#DE3B2E,color:#fff,stroke:#7E120B,stroke-width:2px
-    classDef action fill:#2A3540,color:#A8C8E8,stroke:#7BA7E3,stroke-width:1.5px
-    classDef sound fill:#3A2E1A,color:#FFE285,stroke:#FFE285,stroke-width:1.5px
-    classDef idle fill:#1E2020,color:#9FA5A7,stroke:#5A6063,stroke-width:1px,stroke-dasharray:5 3
-    classDef decision fill:#1E2020,color:#FFE285,stroke:#FFE285,stroke-width:2px
-    classDef tool fill:#282A2B,color:#E2E2E2,stroke:#4A4F52
+    style A fill:#FFE285,color:#3B2F00,stroke:#3B2F00,stroke-width:2px
+    style F fill:#DE3B2E,color:#fff,stroke:#7E120B,stroke-width:2px
+    classDef start fill:#FFE285,color:#3B2F00,stroke:#3B2F00,stroke-width:2px
+    classDef main fill:#282A2B,color:#E2E2E2,stroke:#4A4F52,stroke-width:1.5px
+    classDef end fill:#DE3B2E,color:#fff,stroke:#7E120B,stroke-width:2px
 ```
-
-### 🎯 Leyenda
-
-| Color | Significado |
-|:---:|---|
-| 🟡 **Amarillo** | Punto de inicio (usuario) |
-| 🔴 **Rojo** | Escena principal (Home + selección de herramienta) |
-| 🔵 **Azul** | Acción animada |
-| 🟠 **Dorado oscuro** | Momento con sonido + háptica |
-| ⚫ **Gris punteado** | Estado de espera / reposo |
-| 🟢 **Diamante dorado** | Decisión del usuario |
 
 ---
 
