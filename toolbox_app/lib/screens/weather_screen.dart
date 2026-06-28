@@ -93,12 +93,13 @@ class _WeatherScreenState extends State<WeatherScreen> {
                         child: Column(
                           children: [
                             Row(
-                              mainAxisSize: MainAxisSize.min,
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 const Icon(Icons.location_on_outlined, color: AppColors.primary, size: 16),
                                 const SizedBox(width: 4),
                                 Flexible(
-                                  child: Text('Santo Domingo, República Dominicana',
+                                  child: Text('Santo Domingo, RD',
+                                    textAlign: TextAlign.center,
                                     style: GoogleFonts.inter(color: AppColors.onSurfaceVariant, fontSize: 12),
                                     overflow: TextOverflow.ellipsis,
                                   ),
@@ -108,14 +109,19 @@ class _WeatherScreenState extends State<WeatherScreen> {
                             const SizedBox(height: 24),
                             Floating(child: Icon(_icon(wcode), size: 64, color: AppColors.primary)),
                             const SizedBox(height: 12),
-                            CountUp(
-                              value: (current?['temperature_2m'] as num?) ?? 0,
-                              decimals: 1,
-                              suffix: '°C',
-                              style: GoogleFonts.inter(fontSize: 56, fontWeight: FontWeight.w800, color: AppColors.onSurface),
+                            FittedBox(
+                              fit: BoxFit.scaleDown,
+                              child: CountUp(
+                                value: (current?['temperature_2m'] as num?) ?? 0,
+                                decimals: 1,
+                                suffix: '°C',
+                                style: GoogleFonts.inter(fontSize: 56, fontWeight: FontWeight.w800, color: AppColors.onSurface),
+                              ),
                             ),
                             const SizedBox(height: 4),
                             Text(_desc(wcode),
+                              textAlign: TextAlign.center,
+                              overflow: TextOverflow.ellipsis,
                               style: GoogleFonts.inter(color: AppColors.onSurfaceVariant, fontSize: 16)),
                             const SizedBox(height: 20),
                             const Divider(),
@@ -183,7 +189,7 @@ class _InfoTile extends StatelessWidget {
     return Column(children: [
       Icon(icon, color: AppColors.onSurfaceVariant, size: 20),
       const SizedBox(height: 4),
-      Text(value, style: GoogleFonts.inter(color: AppColors.onSurface, fontWeight: FontWeight.w700, fontSize: 16)),
+      Text(value, style: GoogleFonts.inter(color: AppColors.onSurface, fontWeight: FontWeight.w700, fontSize: 16), overflow: TextOverflow.ellipsis),
       Text(label, style: GoogleFonts.inter(color: AppColors.onSurfaceVariant, fontSize: 11)),
     ]);
   }

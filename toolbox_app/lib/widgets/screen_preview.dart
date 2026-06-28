@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import '../theme/app_theme.dart';
 
-/// Mini-mockup representativo de una pantalla, para mostrar dentro de la carta.
-/// Es un "preview" estilizado (no la pantalla real) — ligero y nítido en móvil.
 class ScreenPreview extends StatelessWidget {
   final IconData icon;
   final String title;
@@ -36,27 +34,23 @@ class ScreenPreview extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 14),
-          // icono central representativo
+          // ícono dentro del círculo dorado
           Expanded(
             child: Center(
               child: Container(
-                width: 72,
-                height: 72,
-                alignment: Alignment.center,
+                width: 62,
+                height: 62,
                 decoration: BoxDecoration(
-                  color: AppColors.primary.withOpacity(0.28),
                   shape: BoxShape.circle,
-                  border: Border.all(color: AppColors.primary.withOpacity(0.6), width: 1),
+                  color: AppColors.primary.withOpacity(0.15),
+                  border: Border.all(color: AppColors.primary, width: 1.8),
                 ),
-                child: Transform.translate(
-                  offset: const Offset(0, -3),
-                  child: Icon(icon, size: 32, color: AppColors.primary),
-                ),
+                child: Icon(icon, size: 30, color: AppColors.primary),
               ),
             ),
           ),
           const SizedBox(height: 12),
-          // "tarjetas" / líneas de contenido simuladas
+          // filas de contenido simuladas
           _fauxRow(),
           const SizedBox(height: 8),
           _fauxRow(short: true),
