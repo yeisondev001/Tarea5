@@ -1,180 +1,292 @@
-# Caja de Herramientas
+<div align="center">
 
-Aplicación móvil multiplataforma desarrollada con **Flutter** como parte de la **Tarea 6** del curso *Introducción al Desarrollo de Aplicaciones Móviles*. Reúne 7 mini-herramientas que consumen APIs REST públicas y las presenta dentro de una experiencia inmersiva: una **caja de herramientas roja que cae sobre un banco de trabajo en un garaje** y, al abrirse, despliega un **abanico de cartas interactivo** para elegir cada herramienta.
+# 🧰 Caja de Herramientas
 
-## Experiencia principal (Home animado)
+### Una app móvil que se siente como abrir una caja de herramientas real
 
-La pantalla de inicio no es un menú estático, sino una escena animada construida 100% con vectores (`CustomPainter`), sin imágenes externas:
+[![Flutter](https://img.shields.io/badge/Flutter-3.44-02569B?logo=flutter&logoColor=white)](https://flutter.dev/)
+[![Dart](https://img.shields.io/badge/Dart-3.12-0175C2?logo=dart&logoColor=white)](https://dart.dev/)
+[![Material You](https://img.shields.io/badge/Material%20You-Dark-FFE285?logo=materialdesign&logoColor=3B2F00)](https://m3.material.io/)
+[![Platforms](https://img.shields.io/badge/Android%20%7C%20iOS%20%7C%20Web%20%7C%20Desktop-supported-success)](#)
 
-1. 🧰 **La caja cae del cielo** y rebota suavemente al aterrizar sobre la mesa.
-2. 👆 Al **tocar la caja**, la tapa se abre en 3D y las herramientas salen **en abanico** por encima de ella.
-3. 🃏 El abanico es **interactivo**: deslizas para hojear y **tocas una carta para seleccionarla** (se agranda y resalta). Un **segundo toque** sobre la carta seleccionada **expande la carta hasta convertirse en la pantalla** (efecto *container transform*).
-4. 🔄 Al tocar de nuevo la caja, las cartas **regresan a su interior** y la tapa se cierra.
+**7 herramientas · 6 APIs públicas · 6 sonidos sintetizados · 0 imágenes para los gráficos**
 
-El fondo recrea un **garaje real**: techo de madera, tira de luz LED, pared con *pegboard* y herramientas colgadas (martillo, llave, destornilladores, alicate, serrucho, nivel, cinta métrica), gabinetes rojos con tope de madera y piso de concreto con luz cenital.
+</div>
 
-## Herramientas incluidas
+---
 
-| Herramienta | Descripción | API utilizada | Efecto de entrada |
-|---|---|---|---|
-| **Predecir Género** | Predice el género probable de un nombre con porcentaje de confianza | [Genderize.io](https://genderize.io/) | Pop-in del resultado |
-| **Predecir Edad** | Estima la edad media asociada a un nombre y la clasifica (Joven / Adulto / Anciano) | [Agify.io](https://agify.io/) | Número que cuenta (count-up) + imagen flotante |
-| **Universidades** | Lista universidades de un país con dominios y enlaces web | [Universities List](https://github.com/Hipo/university-domains-list) vía proxy | Tarjetas escalonadas |
-| **Clima en RD** | Temperatura actual, humedad, viento y pronóstico de 3 días para Santo Domingo | [Open-Meteo](https://open-meteo.com/) | Temperatura count-up + ícono flotante + pronóstico escalonado |
-| **Pokémon** | Información, tipos, estadísticas, imagen oficial y reproducción del grito | [PokéAPI](https://pokeapi.co/) | Sprite flotante + tarjetas escalonadas |
-| **Noticias WordPress** | Últimas 3 publicaciones del blog con imagen destacada y enlace al artículo | [tecnologia21.com](https://tecnologia21.com) (REST API) | Noticias escalonadas |
-| **Acerca de** | Contacto y presentación del desarrollador | — | Entrada coreografiada + avatar con anillo dorado + microinteracciones |
+## ✨ ¿Qué hace especial esta app?
 
-## Características técnicas
+> No es una lista de menú. Es una **escena interactiva**: una caja roja cae del cielo sobre el banco de trabajo de un garaje, rebota, y al tocarla se abre desplegando un abanico de cartas — cada una con sonido propio, vibración háptica y transiciones cinemáticas.
 
-- **Framework:** Flutter 3.x con Dart SDK `^3.12.0`
-- **Material Design 3** con tema oscuro personalizado (paleta dorada sobre fondo `#121414`)
-- **Tipografía:** Google Fonts (Inter)
-- **Gráficos vectoriales:** la caja, el garaje, el banco de trabajo, las herramientas del *pegboard* y la pokébola se dibujan con `CustomPainter` (0 KB de assets, nítidos a cualquier resolución)
-- **Animaciones:** caída con rebote, apertura de tapa en 3D (perspectiva con `Matrix4`), abanico interactivo, *container transform* con el paquete `animations` (`OpenContainer`), count-up, pop-in, flotación y entradas escalonadas
-- **Consumo de APIs:** paquete `http`
-- **Multimedia:** `audioplayers` para gritos de Pokémon, `cached_network_image` para imágenes
-- **Enlaces externos:** `url_launcher` para abrir sitios web, correo y teléfono
-- **Plataformas soportadas:** Android, iOS, Web, Windows, Linux y macOS
+```
+       🧰 ← cae con gravedad real (Curves.bounceOut)
+        ↓   thud × 3 (en cada rebote, volumen decreciente)
+   ════════ ← banco de trabajo de madera
+        ↓
+      *clic* → tapa se abre con chirrido
+        ↓
+   🃏 🃏 🃏 🃏 🃏 🃏 🃏 ← 7 cartas en abanico
+        ↓
+     *tap*  → carta se expande hasta llenar la pantalla
+```
 
-## Estructura del proyecto
+---
+
+## 🛠️ Las 7 herramientas
+
+| | Herramienta | Qué hace | API |
+|:---:|---|---|---|
+| 👤 | **Predecir Género** | Predice género de un nombre con % de confianza | [genderize.io](https://genderize.io/) |
+| 🎂 | **Predecir Edad** | Estima edad media de un nombre (Joven/Adulto/Anciano) | [agify.io](https://agify.io/) |
+| 🎓 | **Universidades** | Lista universidades por país con dominios | [hipolabs](http://universities.hipolabs.com/) |
+| 🌤️ | **Clima en RD** | Tiempo en Santo Domingo + 3 días de pronóstico | [open-meteo](https://open-meteo.com/) |
+| ⚡ | **Pokémon** | Stats, tipos, sprite y grito del Pokémon | [pokeapi](https://pokeapi.co/) |
+| 📰 | **Noticias WP** | Últimas 3 publicaciones del blog | [tecnologia21.com](https://tecnologia21.com) |
+| ℹ️ | **Acerca de** | Contacto del desarrollador con enlaces vivos | — |
+
+---
+
+## 🎬 Cómo se siente — animaciones y feedback
+
+| Momento | Visual | Sonido | Vibración |
+|---|---|:---:|:---:|
+| 🚀 Abre la app | Caja cae 2.2s con `bounceOut` | — | — |
+| 🥁 **Rebote 1** | Toca el banco (impacto fuerte) | 🔊 `thud` 100% | 📳 Fuerte |
+| 🥁 **Rebote 2** | Salto menor | 🔊 `thud` 55% | — |
+| 🥁 **Rebote 3** | Asentamiento | 🔊 `thud` 28% | — |
+| 👆 Tocas la caja | Tapa abre 750ms con `easeOutBack` | 🔊 `lid_open` | 📳 Medio |
+| 🌟 Cartas salen | Abanico desplegándose en arco | 🔊 `fan_spread` | 📳 Suave |
+| 🃏 Tocas carta | Carta se centra y agranda | 🔊 `card_tap` | 📳 Selección |
+| 🚪 Tocas de nuevo | Carta se expande a pantalla completa | 🔊 `screen_open` | 📳 Suave |
+| 🔒 Cierras la caja | Tapa baja, *clack* de madera | 🔊 `box_close` | 📳 Medio |
+
+---
+
+## 🎨 ¿Por qué se ve tan nítido? — Todo es vectorial
+
+Los gráficos NO son PNGs. Se dibujan con **`CustomPainter`** (la API de Canvas de Flutter) — código matemático que genera la imagen en tiempo real:
+
+```dart
+// ejemplo: la tapa de la caja, en lugar de un PNG
+final path = Path()
+  ..moveTo(x1, y1)
+  ..quadraticBezierTo(cx, cy, x2, y2)
+  ..close();
+canvas.drawPath(path, redGradientPaint);
+```
+
+| Elemento | Cómo se hizo |
+|---|---|
+| 🧰 **Caja roja** estilo URREA | `CustomPainter` con 7 tonos de rojo + gradientes + sombras |
+| 🏚️ **Fondo del garaje** | `CustomPainter`: pared, techo de madera, viga, LED, pegboard con herramientas colgadas, gabinete, piso |
+| 📱 **Mini-preview** dentro de cada carta | `Container` + `BoxDecoration` (app bar simulada + ícono en círculo dorado + filas falsas) |
+| 🎯 **Íconos** | Material Icons (vectoriales) de Flutter |
+
+**Beneficios:** nítido en cualquier DPI · APK más liviano · animable (la tapa abre porque es un `Path`, no un sprite) · tematizable.
+
+---
+
+## 🔊 ¿Y los sonidos? — Sintetizados con matemática
+
+Los 6 WAV NO se descargaron. Se generaron con un script Python que escribe ondas muestra por muestra:
+
+```python
+# thud: golpe grave (caja cayendo)
+tone = sin(2π · 70 · t) + sin(2π · 40 · t) · 0.6   # mezcla 70+40 Hz
+noise = random() · 0.25                              # → simula el "golpe seco"
+envelope = e^(-18·t)                                 # → decay rápido
+sample = (tone + noise) · envelope · 0.65
+```
+
+| Sonido | Receta | Duración | Peso |
+|---|---|:---:|:---:|
+| `thud.wav` | Senos 70+40Hz + ruido + decay rápido | 300 ms | 12 KB |
+| `lid_open.wav` | Barrido 200→700 Hz (chirrido) | 220 ms | 9 KB |
+| `fan_spread.wav` | Barrido 800→220 Hz (whoosh) | 280 ms | 12 KB |
+| `card_tap.wav` | Seno 1000 Hz, decay ultra-corto | 65 ms | 2 KB |
+| `screen_open.wav` | Barrido 1200→1800 Hz (campanilla) | 140 ms | 6 KB |
+| `box_close.wav` | Barrido 280→90 Hz + armónico + ruido | 180 ms | 7 KB |
+
+**Total: ~47 KB para los 6 sonidos.** El script (`assets/audio/gen_sounds.py`) es la receta — si quieres ajustar tonos, editas la fórmula y regeneras.
+
+> ⚠️ Python NO se ejecuta en tu celular. Es solo la herramienta que creó los assets (como Photoshop crearía un PNG). La app que corre en el dispositivo es **100% Dart/Flutter**.
+
+---
+
+## 🏗️ Arquitectura del proyecto
 
 ```
 📁 Tarea5/
 │
-├── 📄 README.md ..................... Documentación del proyecto
-├── 🎨 DESIGN.md ..................... Sistema de diseño y guía de movimiento
-├── 🌐 code.html ..................... Prototipo visual de referencia
-├── 📦 toolbox_app.apk ............... APK compilado (Android)
+├── 📄 README.md                        ← este archivo
+├── 🎨 DESIGN.md                        ← sistema de diseño y movimiento
+├── 📦 toolbox.apk                      ← APK release (49 MB)
 │
-└── 📱 toolbox_app/ .................. Proyecto Flutter
+└── 📱 toolbox_app/                     ← Proyecto Flutter
     │
-    ├── 📄 pubspec.yaml .............. Dependencias y configuración
-    ├── 🖼️ assets/images/ ............ Recursos gráficos
+    ├── 📄 pubspec.yaml                 ← dependencias y assets
+    │
+    ├── 🖼️  assets/
+    │   ├── images/yeison.jpg           ← foto perfil (único raster)
+    │   └── audio/                      ← 6 WAVs sintetizados + gen_sounds.py
     │
     └── 📂 lib/
+        ├── 🚀 main.dart                ← entry point
         │
-        ├── 🚀 main.dart ............. Punto de entrada de la app
+        ├── 🎨 theme/app_theme.dart     ← colores, AppCard, AppChip
         │
-        ├── 🎨 theme/
-        │   └── app_theme.dart ....... Tema oscuro, colores, AppCard, AppChip
+        ├── 🔊 services/
+        │   └── sound_service.dart      ← singleton: audio + háptica
         │
-        ├── 🧩 widgets/ .............. Componentes y animaciones reutilizables
-        │   ├── toolbox.dart ......... Caja de herramientas vectorial (estilo URREA)
-        │   ├── garage_background.dart  Escena de garaje + banco de trabajo
-        │   ├── screen_preview.dart ... Mini-preview que va dentro de cada carta
-        │   ├── appear.dart .......... Aparición fade + slide-up escalonada
-        │   └── anim.dart ............ CountUp, PopIn y Floating
+        ├── 🧩 widgets/                 ← componentes reutilizables
+        │   ├── toolbox.dart            ← caja roja (CustomPainter)
+        │   ├── garage_background.dart  ← garaje completo (CustomPainter)
+        │   ├── screen_preview.dart     ← mini-preview dentro de cartas
+        │   ├── appear.dart             ← fade + slide-up escalonado
+        │   └── anim.dart               ← CountUp, PopIn, Floating
         │
-        └── 📂 screens/
-            ├── home_screen.dart ......... Escena animada: caja + abanico interactivo
-            ├── gender_screen.dart ....... Predecir género
-            ├── age_screen.dart .......... Predecir edad
-            ├── universities_screen.dart . Buscar universidades
-            ├── weather_screen.dart ...... Clima en Santo Domingo
-            ├── pokemon_screen.dart ...... Consultar Pokémon (+ pokébola vectorial)
-            ├── wordpress_screen.dart .... Noticias del blog
-            └── about_screen.dart ........ Acerca del desarrollador
+        └── 📂 screens/                 ← 1 pantalla por herramienta
+            ├── home_screen.dart        ← 🎬 la escena animada
+            ├── gender_screen.dart      ← 👤
+            ├── age_screen.dart         ← 🎂
+            ├── universities_screen.dart ← 🎓
+            ├── weather_screen.dart     ← 🌤️
+            ├── pokemon_screen.dart     ← ⚡
+            ├── wordpress_screen.dart   ← 📰
+            └── about_screen.dart       ← ℹ️
 ```
 
-### Flujo de la aplicación
+---
+
+## 🔄 Flujo de la aplicación
 
 ```mermaid
 flowchart TD
-    A["🚀 main.dart"] --> B["🏠 HomeScreen (caja + abanico)"]
-    B -->|"tocar carta x2"| C1["👤 Género"]
-    B --> C2["🎂 Edad"]
-    B --> C3["🎓 Universidades"]
-    B --> C4["🌤️ Clima RD"]
-    B --> C5["⚡ Pokémon"]
-    B --> C6["📰 WordPress"]
-    B --> C7["ℹ️ Acerca de"]
+    Start(["🚀 main.dart"]) --> Home["🏠 HomeScreen<br/>caja + abanico animado"]
 
-    C1 --> API1["genderize.io"]
-    C2 --> API2["agify.io"]
-    C3 --> API3["adamix.net"]
-    C4 --> API4["open-meteo.com"]
-    C5 --> API5["pokeapi.co"]
-    C6 --> API6["tecnologia21.com"]
+    Home -->|"toca carta 2 veces"| Sel{"¿Cuál herramienta?"}
 
-    style A fill:#FFE285,color:#3B2F00
-    style B fill:#1E2020,color:#E2E2E2
-    style C1 fill:#282A2B,color:#E2E2E2
-    style C2 fill:#282A2B,color:#E2E2E2
-    style C3 fill:#282A2B,color:#E2E2E2
-    style C4 fill:#282A2B,color:#E2E2E2
-    style C5 fill:#282A2B,color:#E2E2E2
-    style C6 fill:#282A2B,color:#E2E2E2
-    style C7 fill:#282A2B,color:#E2E2E2
-    style API1 fill:#333535,color:#CFC6AF
-    style API2 fill:#333535,color:#CFC6AF
-    style API3 fill:#333535,color:#CFC6AF
-    style API4 fill:#333535,color:#CFC6AF
-    style API5 fill:#333535,color:#CFC6AF
-    style API6 fill:#333535,color:#CFC6AF
+    Sel --> G["👤 Género"]
+    Sel --> E["🎂 Edad"]
+    Sel --> U["🎓 Universidades"]
+    Sel --> W["🌤️ Clima"]
+    Sel --> P["⚡ Pokémon"]
+    Sel --> N["📰 WordPress"]
+    Sel --> A["ℹ️ Acerca de"]
+
+    G -.->|HTTP GET| API1[("genderize.io")]
+    E -.->|HTTP GET| API2[("agify.io")]
+    U -.->|HTTP GET| API3[("hipolabs")]
+    W -.->|HTTP GET| API4[("open-meteo.com")]
+    P -.->|HTTP GET| API5[("pokeapi.co")]
+    N -.->|HTTP GET| API6[("tecnologia21.com")]
+
+    style Start fill:#FFE285,color:#3B2F00,stroke:#3B2F00,stroke-width:2px
+    style Home fill:#DE3B2E,color:#fff,stroke:#7E120B,stroke-width:2px
+    style Sel fill:#1E2020,color:#FFE285,stroke:#FFE285
+    style G fill:#282A2B,color:#E2E2E2
+    style E fill:#282A2B,color:#E2E2E2
+    style U fill:#282A2B,color:#E2E2E2
+    style W fill:#282A2B,color:#E2E2E2
+    style P fill:#282A2B,color:#E2E2E2
+    style N fill:#282A2B,color:#E2E2E2
+    style A fill:#282A2B,color:#E2E2E2
 ```
 
-## Requisitos previos
+### Anatomía de una animación — la caja cayendo
 
-- [Flutter SDK](https://docs.flutter.dev/get-started/install) (3.x o superior)
-- Android Studio / VS Code con extensiones de Flutter
-- Conexión a internet (todas las herramientas dependen de APIs externas)
+```mermaid
+sequenceDiagram
+    participant U as Usuario
+    participant H as HomeScreen
+    participant F as _fall Controller<br/>(bounceOut 2.2s)
+    participant S as SoundService
 
-## Instalación y ejecución
+    U->>H: abre la app
+    H->>F: forward()
+    Note over F: t=0.36 → primer rebote
+    F->>S: play(thud, vol=1.0)
+    S-->>U: 🔊📳 golpe fuerte
+    Note over F: t=0.73 → segundo rebote
+    F->>S: play(thud, vol=0.55)
+    S-->>U: 🔊 golpe medio
+    Note over F: t=0.91 → tercer toque
+    F->>S: play(thud, vol=0.28)
+    S-->>U: 🔊 toque leve
+    F-->>H: completed
+    H->>H: _landed = true ✅
+```
 
-1. Clona el repositorio:
+---
+
+## 📦 Dependencias
+
+| Paquete | Para qué |
+|---|---|
+| [`http`](https://pub.dev/packages/http) | Llamadas GET a las 6 APIs |
+| [`url_launcher`](https://pub.dev/packages/url_launcher) | Abrir GitHub/LinkedIn/email/teléfono desde "Acerca de" |
+| [`audioplayers`](https://pub.dev/packages/audioplayers) | Reproducir los WAV con control de volumen |
+| [`cached_network_image`](https://pub.dev/packages/cached_network_image) | Cache de sprites de Pokémon |
+| [`google_fonts`](https://pub.dev/packages/google_fonts) | Tipografía Inter consistente |
+| [`animations`](https://pub.dev/packages/animations) | `OpenContainer` (transición carta → pantalla) |
+| [`flutter_launcher_icons`](https://pub.dev/packages/flutter_launcher_icons) | Generar el ícono de la app |
+
+---
+
+## 🚀 Cómo correrlo
 
 ```bash
+# Clonar
 git clone https://github.com/yeisondev001/Tarea5.git
 cd Tarea5/toolbox_app
-```
 
-2. Instala las dependencias:
-
-```bash
+# Dependencias
 flutter pub get
-```
 
-3. Ejecuta la aplicación:
-
-```bash
+# Ejecutar en modo debug
 flutter run
-```
 
-Para generar un APK de release:
-
-```bash
+# O construir APK release (Android)
 flutter build apk --release
 ```
 
-> **Nota web:** varias herramientas consumen APIs de terceros que pueden bloquear las peticiones por **CORS** al correr en navegador. En un dispositivo **Android/iOS** real funcionan con normalidad. Las animaciones se ven igual en todas las plataformas.
+> 💡 **Para web:** usar `flutter build web --release` y servir `build/web` con cualquier HTTP server. El modo debug en Chrome demora 1-2 minutos en cargar CanvasKit la primera vez — release es instantáneo.
 
-## Dependencias principales
+---
 
-| Paquete | Uso |
+## 🧠 Decisiones técnicas y problemas resueltos
+
+| Reto | Solución |
 |---|---|
-| `http` | Peticiones GET a APIs REST |
-| `google_fonts` | Tipografía Inter |
-| `animations` | Transición *container transform* (`OpenContainer`) carta → pantalla |
-| `audioplayers` | Reproducir sonidos de Pokémon |
-| `cached_network_image` | Caché de imágenes de red |
-| `url_launcher` | Abrir URLs, correo y teléfono |
+| 🐌 Modo debug web tardaba 2 min en cargar | Build release + Python HTTP server |
+| 💥 APK fallaba con path "Introducción al desarrollo..." | Trabajo desde `C:\tarea6` (path ASCII) y sync con `robocopy` |
+| 📸 La foto cortaba la frente | `ClipOval` + `alignment: Alignment(0, -0.6)` |
+| 🔗 URLs largas desbordaban el "Acerca de" | Texto corto + URL real solo al tap |
+| 🌡️ Temperatura grande desbordaba el card | `FittedBox(fit: BoxFit.scaleDown)` |
+| 🎞️ Lag con fondo repintándose 60 FPS | `RepaintBoundary` alrededor de `GarageBackground` |
+| 🔊 Sonido sonaba solo al final del rebote | Listener detecta 3 momentos clave (`t=0.36/0.73/0.91`) y dispara `thud` con volumen decreciente |
 
-## Diseño y movimiento
+---
 
-La interfaz sigue un sistema de diseño propio documentado en [`DESIGN.md`](DESIGN.md):
+## 👤 Autor
 
-- Tema oscuro con acento dorado (`#FFE285`)
-- Tarjetas con bordes sutiles y esquinas redondeadas (16px)
-- Componentes reutilizables: `AppCard`, `AppChip`
-- Sistema de movimiento contenido (curvas `easeOutCubic`/`easeOutBack`, duraciones cortas, *stagger* pequeño) y un *home* con metáfora física de caja de herramientas
+**Yeison Gregori Rojas Henríquez**
+Matrícula: `20241822`
 
-## Autor
+- 🐙 GitHub: [@yeisondev001](https://github.com/yeisondev001)
+- 💼 LinkedIn: [yeison-rojas-henriquez](https://www.linkedin.com/in/yeison-rojas-henriquez)
+- 📧 Email: yeisonrojass03@gmail.com
+- 📱 +1 (829) 801-9374
 
-**Yeison** — [GitHub @yeisondev001](https://github.com/yeisondev001)
+> *Tarea 6 — Introducción al Desarrollo de Aplicaciones Móviles*
 
-> Tarea 6 — Introducción al Desarrollo de Aplicaciones Móviles
+---
 
-## Licencia
+<div align="center">
 
-Proyecto académico. Uso libre con fines educativos.
+**100% Flutter · 100% Vectorial · 100% Sintetizado**
+
+🧰 Hecho con cariño y mucho `CustomPainter` 🧰
+
+</div>
