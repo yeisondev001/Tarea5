@@ -1,7 +1,5 @@
 <div align="center">
 
-![Demo de la Caja de Herramientas](docs/assets/demo.gif)
-
 # 🧰 Caja de Herramientas
 
 ### Una app móvil que se siente como abrir una caja de herramientas real
@@ -12,7 +10,7 @@
 [![Platforms](https://img.shields.io/badge/Android%20%7C%20iOS%20%7C%20Web%20%7C%20Desktop-supported-success)](#)
 [![Licencia: MIT](https://img.shields.io/badge/Licencia-MIT-E8C547)](LICENSE)
 
-**7 herramientas · 6 APIs públicas · 6 sonidos sintetizados · 0 imágenes para los gráficos**
+![Demo de la Caja de Herramientas](docs/assets/demo.gif)
 
 </div>
 
