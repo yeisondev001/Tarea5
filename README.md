@@ -34,6 +34,12 @@
      *tap*  → carta se expande hasta llenar la pantalla
 ```
 
+## 📸 El proyecto real
+
+| El garaje y la caja | El abanico de cartas | Una herramienta (Pokémon) |
+|:---:|:---:|:---:|
+| <img src="docs/assets/screenshot_garage.png" width="280"> | <img src="docs/assets/screenshot_home.png" width="280"> | <img src="docs/assets/screenshot_pokemon.png" width="280"> |
+
 ---
 
 ## 🛠️ Las 7 herramientas
