@@ -1,5 +1,7 @@
 <div align="center">
 
+[![Caja de Herramientas — banner](docs/assets/banner.svg)](docs/assets/banner.svg)
+
 # 🧰 Caja de Herramientas
 
 ### Una app móvil que se siente como abrir una caja de herramientas real
@@ -8,6 +10,7 @@
 [![Dart](https://img.shields.io/badge/Dart-3.12-0175C2?logo=dart&logoColor=white)](https://dart.dev/)
 [![Material You](https://img.shields.io/badge/Material%20You-Dark-FFE285?logo=materialdesign&logoColor=3B2F00)](https://m3.material.io/)
 [![Platforms](https://img.shields.io/badge/Android%20%7C%20iOS%20%7C%20Web%20%7C%20Desktop-supported-success)](#)
+[![Licencia: MIT](https://img.shields.io/badge/Licencia-MIT-E8C547)](LICENSE)
 
 **7 herramientas · 6 APIs públicas · 6 sonidos sintetizados · 0 imágenes para los gráficos**
 
@@ -288,6 +291,12 @@ Matrícula: `20241822`
 - 📱 +1 (829) 801-9374
 
 > *Tarea 6 — Introducción al Desarrollo de Aplicaciones Móviles*
+
+---
+
+## 📄 Licencia
+
+MIT — ver [LICENSE](LICENSE).
 
 ---
 
