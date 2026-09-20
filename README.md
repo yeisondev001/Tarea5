@@ -18,6 +18,12 @@
 
 ---
 
+## 🎥 La app funcionando
+
+![Demo de la Caja de Herramientas](docs/assets/demo.gif)
+
+---
+
 ## ✨ ¿Qué hace especial esta app?
 
 > No es una lista de menú. Es una **escena interactiva**: una caja roja cae del cielo sobre el banco de trabajo de un garaje, rebota, y al tocarla se abre desplegando un abanico de cartas — cada una con sonido propio, vibración háptica y transiciones cinemáticas.
@@ -33,12 +39,6 @@
         ↓
      *tap*  → carta se expande hasta llenar la pantalla
 ```
-
-## 📸 El proyecto real
-
-| El garaje y la caja | El abanico de cartas | Una herramienta (Pokémon) |
-|:---:|:---:|:---:|
-| <img src="docs/assets/screenshot_garage.png" width="280"> | <img src="docs/assets/screenshot_home.png" width="280"> | <img src="docs/assets/screenshot_pokemon.png" width="280"> |
 
 ---
 
