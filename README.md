@@ -20,7 +20,9 @@
 
 ## 🎥 La app funcionando
 
-![Demo de la Caja de Herramientas](docs/assets/demo.gif)
+https://github.com/user-attachments/assets/9939c648-5139-44dd-9bc9-e75bccffaa10d
+
+*(¿No carga? Versión GIF sin sonido: [docs/assets/demo.gif](docs/assets/demo.gif))*
 
 ---
 
