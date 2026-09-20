@@ -318,14 +318,11 @@ flutter build apk --release
 ## 👤 Autor
 
 **Yeison Gregori Rojas Henríquez**
-Matrícula: `20241822`
 
 - 🐙 GitHub: [@yeisondev001](https://github.com/yeisondev001)
 - 💼 LinkedIn: [yeison-rojas-henriquez](https://www.linkedin.com/in/yeison-rojas-henriquez)
 - 📧 Email: yeisonrojass03@gmail.com
 - 📱 +1 (829) 801-9374
-
-> *Tarea 6 — Introducción al Desarrollo de Aplicaciones Móviles*
 
 ---
 
