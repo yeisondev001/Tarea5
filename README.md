@@ -48,6 +48,43 @@
 | 📰 | **Noticias WP** | Últimas 3 publicaciones del blog | [tecnologia21.com](https://tecnologia21.com) |
 | ℹ️ | **Acerca de** | Contacto del desarrollador con enlaces vivos | — |
 
+### 🗺️ Herramientas → APIs
+
+```mermaid
+flowchart TD
+    A["🚀 main.dart"] --> B["🏠 HomeScreen (caja + abanico)"]
+    B -->|"tocar carta x2"| C1["👤 Género"]
+    B --> C2["🎂 Edad"]
+    B --> C3["🎓 Universidades"]
+    B --> C4["🌤️ Clima RD"]
+    B --> C5["⚡ Pokémon"]
+    B --> C6["📰 WordPress"]
+    B --> C7["ℹ️ Acerca de"]
+
+    C1 --> API1["genderize.io"]
+    C2 --> API2["agify.io"]
+    C3 --> API3["adamix.net"]
+    C4 --> API4["open-meteo.com"]
+    C5 --> API5["pokeapi.co"]
+    C6 --> API6["tecnologia21.com"]
+
+    style A fill:#FFE285,color:#3B2F00
+    style B fill:#1E2020,color:#E2E2E2
+    style C1 fill:#282A2B,color:#E2E2E2
+    style C2 fill:#282A2B,color:#E2E2E2
+    style C3 fill:#282A2B,color:#E2E2E2
+    style C4 fill:#282A2B,color:#E2E2E2
+    style C5 fill:#282A2B,color:#E2E2E2
+    style C6 fill:#282A2B,color:#E2E2E2
+    style C7 fill:#282A2B,color:#E2E2E2
+    style API1 fill:#333535,color:#CFC6AF
+    style API2 fill:#333535,color:#CFC6AF
+    style API3 fill:#333535,color:#CFC6AF
+    style API4 fill:#333535,color:#CFC6AF
+    style API5 fill:#333535,color:#CFC6AF
+    style API6 fill:#333535,color:#CFC6AF
+```
+
 ---
 
 ## 🎬 Cómo se siente — animaciones y feedback
