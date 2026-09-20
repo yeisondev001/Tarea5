@@ -1,6 +1,6 @@
 <div align="center">
 
-[![Caja de Herramientas — banner](docs/assets/banner.svg)](docs/assets/banner.svg)
+![Demo de la Caja de Herramientas](docs/assets/demo.gif)
 
 # 🧰 Caja de Herramientas
 
@@ -15,12 +15,6 @@
 **7 herramientas · 6 APIs públicas · 6 sonidos sintetizados · 0 imágenes para los gráficos**
 
 </div>
-
----
-
-## 🎥 La app funcionando
-
-![Demo de la Caja de Herramientas](docs/assets/demo.gif)
 
 ---
 
